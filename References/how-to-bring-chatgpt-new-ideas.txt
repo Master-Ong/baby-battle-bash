@@ -1,0 +1,251 @@
+HOW TO BRING CHATGPT NEW IDEAS AND ASK FOR HELP
+Baby Battle Bash - Quick Reference
+
+==================================================
+1. THE MAIN IDEA
+==================================================
+
+You do NOT need to come to ChatGPT with the full answer.
+
+You only need to bring:
+- what you are trying to do
+- what file or system is involved
+- what feels wrong
+- any explanation Claude already gave you
+
+That is enough.
+
+ChatGPT's job is to:
+- simplify confusion
+- find the hidden problem
+- turn messy thoughts into clear rules
+- help prevent future mistakes
+- give you a clean next move
+- write safer prompts for Claude and Claude Code
+
+==================================================
+2. THE 3 WAYS TO BRING A NEW IDEA
+==================================================
+
+1) "I have an idea"
+Use this when the feature is still fuzzy.
+
+Template:
+I have a new idea for Baby Battle Bash.
+
+The idea:
+[describe it simply]
+
+What I want from you:
+- explain it in plain English
+- tell me what could go wrong
+- tell me where it belongs in the project
+- turn it into a clean prompt for Claude
+
+Use this when you are still thinking.
+
+--------------------------------------------------
+
+2) "I have a problem"
+Use this when something feels confusing.
+
+Template:
+I have a project problem.
+
+The problem:
+[describe the confusion]
+
+What I understand so far:
+[paste what Claude said or what you think is true]
+
+What I need:
+- explain it simply
+- tell me the rule I should follow
+- tell me how to avoid this mistake in future prompts
+- give me an example prompt using the rule
+
+Use this when you need ChatGPT to teach and simplify.
+
+--------------------------------------------------
+
+3) "I need a build prompt"
+Use this when the feature is already clear and you want something ready for Claude or Claude Code.
+
+Template:
+I need a clean build prompt for Claude.
+
+Feature:
+[what you want built]
+
+Project rules:
+[important constraints]
+
+Please give me:
+- a clean spec
+- edge cases
+- a Claude prompt
+- a Claude Code prompt
+
+Use this when you are ready to move.
+
+==================================================
+3. HOW CHATGPT WANTS YOU TO APPROACH NEW IDEAS
+==================================================
+
+When you come with a new feature, include these 5 things:
+
+1. What is the feature?
+Examples:
+- drag-and-drop animal cards
+- reward screen
+- map screen
+- merge system
+
+2. What part is visual vs gameplay?
+This matters because visual placement and gameplay logic are different.
+
+Example:
+- visual: card should appear under mouse while dragging
+- gameplay: card should only drop onto empty field slots
+
+3. What nodes are involved?
+Even if rough.
+
+Example:
+- Card in hand
+- Field slot
+- CanvasLayer hand zone
+- Node2D field slots
+
+4. Which coordinate system is involved?
+Ask:
+- Is this inside CanvasLayer?
+- Or inside Node2D world?
+- Or am I not sure yet?
+
+5. What do you want Claude Code to actually do?
+Example:
+- create drag logic
+- snap to valid slot
+- return to hand if invalid
+- highlight slot on hover
+
+This is the habit ChatGPT wants you to build.
+
+==================================================
+4. THE SIMPLEST TEMPLATE TO USE WITH CHATGPT
+==================================================
+
+Template:
+I want help with a new Baby Battle Bash feature.
+
+Feature:
+[feature name]
+
+Goal:
+[what I want the player to experience]
+
+Nodes involved:
+[list them]
+
+Visual or logic:
+[visual / logic / both]
+
+Coordinate system:
+[CanvasLayer / Node2D / not sure]
+
+What I need from you:
+- explain the feature simply
+- tell me what could break
+- tell me the correct coordinate system
+- give me a clean prompt for Claude
+
+This is one of the best default formats to use.
+
+==================================================
+5. HOW TO ASK CHATGPT ABOUT A PROBLEM
+==================================================
+
+Template:
+I think something is wrong in my project.
+
+What I am trying to do:
+[describe the feature or behavior]
+
+What file or system is involved:
+[script name, scene, node, or system]
+
+What feels wrong:
+[what seems confusing or broken]
+
+What I know so far:
+[paste Claude notes if any]
+
+What I want from you:
+- explain simply
+- find risky parts
+- give me rules
+- write the next Claude prompt
+
+This is a strong way to ask for help.
+
+==================================================
+6. HOW TO ASK CHATGPT ABOUT A SCRIPT
+==================================================
+
+Template:
+I think this script may be causing a problem.
+
+Script:
+[script name]
+
+What I think the issue is:
+[describe it]
+
+Please:
+1. explain where the problem might be
+2. tell me what looks correct vs risky
+3. give me a clean rule for future prompts
+4. help me write a safer Claude prompt
+
+==================================================
+7. WHAT CHATGPT WANTS FROM YOU EVERY TIME
+==================================================
+
+You do not need perfect wording.
+You do not need a finished idea.
+You do not need to know the answer first.
+
+Just bring:
+- the goal
+- the file or feature
+- the confusion
+- the current context
+
+ChatGPT will help turn that into:
+- a clear explanation
+- simple rules
+- a safer plan
+- a better prompt for Claude
+
+==================================================
+8. THE SIMPLEST SHORTCUT VERSION
+==================================================
+
+Use this when you do not know how to start:
+
+I need help with a Baby Battle Bash idea.
+
+Here is the idea or problem:
+[write it simply]
+
+Here is what feels confusing:
+[write it simply]
+
+Here is what I need:
+- explain it clearly
+- tell me what could break
+- tell me what rule I should follow
+- give me the next prompt to send to Claude
+
+That is enough.

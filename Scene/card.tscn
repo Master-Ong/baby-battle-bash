@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://c6mb7vfxhx24r"]
+
+; ------------------------------------------------------------------
+; What is a .tscn file?
+;
+; This is the "blueprint" for one card in the game.
+; Every time a card is spawned during play, Godot reads this file
+; and builds the node tree described below.
+;
+; Think of it like a cookie cutter: the .tscn is the cutter,
+; and each spawned card is one cookie made from it.
+; ------------------------------------------------------------------
+
+; --- ext_resource ---
+; This links to an external file that this scene depends on.
+; Here we're linking the card_display.gd script so Godot
+; knows to attach it to the root node of this scene.
+[ext_resource type="Script" uid="uid://bq5c8t2mvy1xp" path="res://Scripts/card_display.gd" id="1_script"]
+
+; --- sub_resource ---
+; A sub_resource is a resource embedded INSIDE this scene file.
+; RectangleShape2D defines the invisible rectangle used for
+; collision detection on the card — this is what lets the mouse
+; "hit" the card when hovering.
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_card"]
+size = Vector2(120, 160)
+
+; =====================================================================
+; NODE TREE
+; Each [node] block creates one node. "parent" tells Godot where
+; in the tree to place it. "parent=." means "child of the root node".
+; =====================================================================
+
+; ROOT NODE — the card itself
+; Area2D detects when the mouse enters/exits its collision shape.
+; The card_display.gd script is attached here.
+[node name="Card" type="Area2D"]
+script = ExtResource("1_script")
+
+; --- CollisionShape2D ---
+; This is the invisible hit-box of the card.
+; It must exactly match the visual size (120 x 160).
+;
+; The shape is CENTERED on its position. At position (60, 80),
+; the rectangle spans from (0,0) to (120,160) — perfectly matching
+; the Panel below.
+[node name="CardCollision" type="CollisionShape2D" parent="."]
+position = Vector2(60, 80)
+shape = SubResource("RectangleShape2D_card")
+
+; --- Panel (CardBackground) ---
+; Panel is a Control node — it draws the grey/white background box
+; you see behind the card. Control nodes are Godot's UI building blocks.
+;
+; offset_right = 120 and offset_bottom = 160 set its SIZE to 120x160.
+; With default anchors, offset_left and offset_top start at 0,
+; so the panel goes from (0,0) to (120,160).
+[node name="CardBackground" type="Panel" parent="."]
+mouse_filter = 2
+offset_right = 120.0
+offset_bottom = 160.0
+
+; --- CardName Label ---
+; Shows the card's name (e.g. "Strike", "Defend") at the top of the card.
+; Labels inside a Panel use offsets relative to the Panel's top-left corner.
+;
+; position (8,8): 8px from left edge, 8px from top
+; size 104x24: spans most of the card width, 24px tall
+[node name="CardName" type="Label" parent="CardBackground"]
+mouse_filter = 2
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 112.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 14
+text = "Card Name"
+
+; --- CardCost Label ---
+; Shows the energy cost number in the top-right corner of the card.
+; It overlaps with CardName's x range intentionally — cost sits top-right.
+;
+; position (88,8): near the right edge
+; size 24x24: small square for a single digit
+[node name="CardCost" type="Label" parent="CardBackground"]
+mouse_filter = 2
+offset_left = 88.0
+offset_top = 8.0
+offset_right = 112.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 14
+text = "1"
+
+; --- CardType Label ---
+; Shows "Attack", "Skill", or "Power" below the art area.
+; Smaller font since it's secondary information.
+[node name="CardType" type="Label" parent="CardBackground"]
+mouse_filter = 2
+offset_left = 8.0
+offset_top = 64.0
+offset_right = 112.0
+offset_bottom = 84.0
+theme_override_font_sizes/font_size = 11
+text = "Attack"
+
+; --- CardDescription Label ---
+; Shows the card's effect text at the bottom of the card.
+; autowrap_mode = 3 enables word wrapping so long text
+; automatically breaks onto the next line instead of overflowing.
+[node name="CardDescription" type="Label" parent="CardBackground"]
+mouse_filter = 2
+offset_left = 8.0
+offset_top = 90.0
+offset_right = 112.0
+offset_bottom = 150.0
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 3
+text = "Description"

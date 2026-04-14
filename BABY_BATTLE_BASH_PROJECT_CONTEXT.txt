@@ -1,0 +1,295 @@
+Baby Battle Bash - Project Context File
+Paste this at the start of any new Claude conversation to get instantly caught up.
+Last updated: April 2026
+
+---
+
+ABOUT THE DEVELOPER
+
+- Name: Nicky
+- Background: 30 year old Vietnamese/Chinese, first generation American, revert Muslim (6 years)
+- Work: Salesman in wholesale cabinet industry
+- Family: Married, soon to be father
+- Education: 3 years college, no degree - strong project and team experience
+- AI experience: Beginner, learning as he goes
+- Goals: Build Baby Battle Bash, become a halal Southeast Asian food content creator, multiple income streams
+
+---
+
+WORKFLOW PREFERENCES
+
+- Nicky consults Claude.ai first to design and plan ideas
+- Claude writes Claude Code (CC) prompts that Nicky pastes directly into his terminal
+- CC builds files directly into the Godot project
+- Nicky brings screenshots of errors or visual issues back to Claude for diagnosis
+- Claude explains WHY things break so Nicky learns along the way
+- No line-by-line coding from scratch - CC handles construction
+- Nicky is the creative director, Claude is the architect, CC is the contractor
+
+---
+
+PROJECT INFO
+
+- Game name: Baby Battle Bash
+- Engine: Godot 4 (version 4.6.2 stable)
+- Project path: C:\Users\Nicky\Documents\baby-battle-bash
+- Scene folder: res://Scene/
+- Scripts folder: res://Scripts/
+- Game resolution: 1152 x 648 (16:9 widescreen)
+- Coordinate system: CanvasLayer uses TOP-LEFT origin (0,0 = top left corner)
+- Godot world center: X=0, Y=0 (left edge X=-576, right edge X=576, top Y=-324, bottom Y=324)
+
+---
+
+GAME CONCEPT
+
+A 2D card deckbuilding roguelike with an educational hook. Players collect and combine animal cards modified by colors, adjectives, and verb action cards to battle mobs. Designed for all ages - kids learn real animal facts, colors, and vocabulary while adults get deep strategic gameplay.
+
+Design North Star:
+- Easy to read in one glance: animal = body, color = passive role, adjective = premium modifier, verb = action
+- Cozy and collectible first, strategic second
+- Every subsystem does a different job
+- Runs create stories (a Bunny becomes a Blue draw engine, gains BIG and FAST, wins by cycling Scratch and Run Away)
+
+Important Design Rules:
+- No shirk (no false gods, idol worship, or polytheistic lore themes)
+- Cards use Area2D NOT CharacterBody2D
+- MobContainer is the ONLY thing swapped between encounters
+- CanvasLayer uses top-left origin for all UI positioning
+
+---
+
+SCREEN LAYOUT (confirmed working positions)
+
+- TOP HUD: HP and Energy top left, Mr. Kiwi name and HP top center
+- ENEMY ZONE: Mob zone panel centered above field slots
+- FIELD ZONE: 3 slots centered, CardSlot2 at X=0 anchor
+- HAND ZONE: Bottom center, 5 cards at X=-220, -110, 0, 110, 220
+- DECK: Bottom left panel
+- GRAVEYARD: Bottom right panel
+- END TURN BUTTON: Bottom right above graveyard box
+
+---
+
+CARD FLOW RULES
+
+- Animal cards: played to field slot, stay until defeated, defeated goes to graveyard, recycled into deck
+- Color and Word cards: apply effect immediately, go to graveyard, recycled into deck, never stay on field
+- End of turn: unused hand cards recycled to graveyard
+- Draw 5 new cards each turn
+- If deck reaches 0: shuffle graveyard into deck, draw remaining cards needed to fill hand to 5
+
+---
+
+THE FOUR CARD LAYERS
+
+1. Animal Cards (the body)
+- 12 animals across 3 types
+- Speed: Rabbit / Deer / Cat / Frog / Fox - fast, draw/tempo, card velocity, evasion
+- Defense: Turtle / Sheep / Cow / Chicken - high HP, healing, armor, stall
+- Power: Lion / Bear / Dog / Crow - big hits, burst windows, attack multipliers
+- Rock-paper-scissors: Power beats Defense, Defense beats Speed, Speed beats Power
+- Small edges not hard counters (kid: flat nudge, advanced: percentage based)
+- Animals have stage progression (example: Bunny -> Rabbit -> Fluffle)
+
+2. Color Cards (passive role modifier)
+- Blue: Draw +X
+- Red: Rage / ATK boost
+- Green: Heal +X
+- Yellow: Energy / extra actions
+- Purple: Shield
+- White: Balanced stat boost
+- Colors are PERMANENT for the run when applied
+- Any animal can wear any color
+
+3. Adjective Cards (premium modifier)
+- BIG, FAST, TOUGH, SHARP, SMART, MAGIC
+- Up to 3 adjectives can stack on one card
+- Adjectives are rarer than colors
+
+4. Verb Cards (action cards)
+- Damage: Scratch, Bite, Pounce, Roar
+- Defense: Hide, Block, Curl Up, Guard
+- Draw/Speed: Run Away, Scout, Dash, Sneak
+- Tempo: Hurry, Swap, Call Friend, Quick Move
+- Magic/Trick: Trick, Confuse, Shield Spell, Copy
+
+---
+
+TWO BALANCE MODES (One Card Pool)
+
+System         | Kid Version              | Advanced Version
+Stats          | Small whole numbers      | Larger values plus growth curves
+RPS            | Flat bonuses             | Percent-based modifiers
+Colors         | Static stage scaling     | Stage scaling plus archetype hooks
+Adjectives     | Large flat bonuses       | Multipliers, dodge, crit, block, engine text
+Verbs          | One clear effect         | Conditional effects, scaling, sequencing payoff
+
+---
+
+RARITY SYSTEM
+
+- Common: 32%
+- Uncommon: 26%
+- Rare: 22%
+- Epic: 12%
+- Mythic: 8%
+- Rewards: 3 cards per reward group
+
+---
+
+TURN FLOW (Slay the Spire style)
+
+1. Draw phase - draw 5 cards
+2. Player turn - play cards using energy
+3. Animals attack mob at end of turn
+4. Mob attacks animals, player takes damage if field is empty
+5. End turn - discard hand, draw new hand
+- Energy resets to 3 at start of each turn
+- Block/defense does NOT carry over between turns
+- Hand cap: 10 cards maximum
+
+---
+
+RABBIT FAMILY DESIGN
+
+Bunny (Stage 1 - Speed type)
+- Kid: HP 12, ATK 4, DEF 2 | Passive: Draw 1 card when played
+- Advanced: HP 18, ATK 6, DEF 3 | Passive: Draw 1. If 3+ cards in hand, +1 ATK this turn
+
+Rabbit (Stage 2 - Speed type)
+- Kid: HP 20, ATK 7, DEF 4 | Passive: Draw 1. +2 ATK if Verb played this turn
+- Advanced: HP 30, ATK 11, DEF 6 | Passive: Draw 2. If last card was Verb, +15% ATK and draw again
+
+Fluffle (Stage 3 - Merge: 3 Bunnies = 1 Fluffle)
+- Kid: HP 35, ATK 12, DEF 7 | Passive: Draw 2. All Speed animals +3 ATK
+- Advanced: HP 55, ATK 18, DEF 11 | Passive: Draw 3. Speed animals +20% ATK. If hand hits 5+, deal 5 to all enemies
+- Merge cost: 0 energy (3 cards sacrificed is the cost)
+- Fluffle stays permanently in deck for the rest of the run
+
+Rabbit Color Variants:
+- Blue = Snowshoe Hare (Draw 2 instead of 1)
+- Red = Volcano Rabbit (endangered, Mexico - +4 ATK, loses draw)
+- Green = European Hare (Heal 3 HP when drawn)
+- Yellow = Jackrabbit (Play extra Verb this turn)
+- Purple = Himalayan Rabbit (Gain 4 Shield when played)
+- White = Angora Rabbit (+2 to all stats)
+
+---
+
+COMBAT SCENE STRUCTURE (Built in Godot)
+
+CombatScene              <- Node2D (root)
+├── Camera2D             <- Fixed, position smoothing OFF
+├── CanvasLayer          <- Layer index 1, pins UI to screen
+│   └── HandZone_Area2D  <- Bottom center hand display
+├── DG_Node2D            <- Deck and Graveyard container
+│   ├── DeckPanel        <- Bottom left
+│   └── GraveyardPanel   <- Bottom right
+├── PlayerField_Node2D   <- 3 card slots
+│   ├── CardSlot1_Area2D <- Left
+│   ├── CardSlot2_Area2D <- Center (X=0 anchor)
+│   └── CardSlot3_Area2D <- Right
+├── MobContainerNode2D   <- Swap this per encounter
+└── GamerManager_Node    <- Game brain script attached
+
+---
+
+GAMEMANAGER SCRIPT (gamer_manager_node.gd)
+
+Key functions built:
+- build_starting_deck() - 10 Strikes + 4 Defends + 3 Bunnies
+- start_turn() - resets energy, draws 5, guarantees 2 Bunnies on turn 1
+- end_turn() - calls resolve_combat(), discards hand, draws new hand
+- draw_cards(amount) - draws with hand cap and graveyard refill
+- resolve_combat() - animals attack mob, mob attacks animals, player takes damage if field empty
+- play_animal_card() - places on field, free, no energy cost
+- play_attack_card() - deals damage to mob, costs energy
+- play_skill_card() - gives player defense, costs energy
+- play_color_or_word_card() - applies buff to field animals, costs energy
+- win_combat() - mob HP reaches 0, game pauses
+- lose_combat() - player HP reaches 0, game pauses
+- take_mob_damage(amount) - reduces mob HP, checks win
+- take_player_damage(amount) - reduces player HP after defense, checks loss
+- spawn_hand_visuals() - spawns card scenes in hand zone
+- spawn_field_visuals() - updates field slot display
+- update_hud() - updates all labels on screen
+
+---
+
+FILES BUILT
+
+- res://Scene/combat_scene.tscn (done)
+- res://Scripts/Card.gd (done)
+- res://Scripts/gamer_manager_node.gd (done)
+- res://Scene/card.tscn (done)
+- res://Scripts/card_display.gd (done)
+
+FILES TO BUILD NEXT
+
+- res://Scene/reward_screen.tscn - 3 card selection after combat
+- res://Scripts/reward_screen.gd - reward screen logic
+- res://Scene/map_screen.tscn - map navigation between combats
+- res://Scripts/map_manager.gd - map logic
+
+---
+
+PROGRESS TRACKER
+
+RULE: Update this section every time CC completes a task before closing the session.
+RULE: Files Built list above must always match what is actually in the project.
+
+DONE:
+- Combat scene node structure built
+- GameManager script with deck, energy, turn flow working
+- Card.gd data blueprint built by CC
+- card.tscn and card_display.gd built
+- Cards spawning visually in hand zone, all 5 visible
+- HP, Energy, Mr. Kiwi name and HP showing on screen
+- End Turn button working, positioned bottom right
+- Card type routing - ATTACK/SKILL/ANIMAL/COLOR all handled
+- play_attack_card, play_skill_card, play_animal_card, play_color_or_word_card all working
+- resolve_combat() - animals attack mob, mob attacks animals, damage logic working
+- win_combat() and lose_combat() conditions working
+- draw_cards with graveyard shuffle refill working
+- Opening hand guarantee - at least 2 Bunny animal cards on turn 1
+- MobZonePanel, FieldZonePanel, SlotPanels, DeckPanel, GraveyardPanel all visible
+- godot-mcp connected and working
+- Claude Code memory and memory-keeper configured
+- Art pipeline established - Hamster variants, Gorilla mob boss with idle animation
+- Rabbit family fully designed
+
+IN PROGRESS:
+- Card drag and drop - animal cards to field slots
+
+UP NEXT:
+- Drag animal card from hand to field slot
+- Click Strike card to deal damage - confirm working
+- Click Defend card to gain block - confirm working
+- Test full combat loop end to end
+- Design Turtle family (Defense type)
+- Design Lion family (Power type)
+- Build reward screen (3 card selection after combat)
+- Build map/room navigation between combats
+- Add relic/artifact layer after base verbs feel good
+- Playtesting
+
+KNOWN ISSUES:
+- Strike click damage not yet confirmed working - test next session
+- Card drag and drop not built yet - next major feature
+- 2D editor view looks scattered - normal, game view is correct
+
+---
+
+ART PIPELINE
+
+- Tool: Aseprite with PixelLab AI generation
+- Style: Chibi pixel art, transparent background, 4 frames per character
+- Always include in prompts: chibi, round, pixel art, side view, kid friendly
+- Art generated: Hamster variants (base/red/blue/green), Gorilla mob boss with idle animation
+- Export: Sprite sheet PNG or individual PNGs
+- Save to: C:\Users\Nicky\Documents\baby-battle-bash\assets\sprites\
+
+---
+
+End of context file. Always update before closing a CC session.

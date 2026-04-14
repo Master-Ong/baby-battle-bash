@@ -1,0 +1,180 @@
+[gd_scene format=3 uid="uid://fh8307o7iqsq"]
+
+[ext_resource type="Script" uid="uid://dmvvs0lr6dmy7" path="res://Scripts/gamer_manager_node.gd" id="1_nbkot"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nbkot"]
+size = Vector2(576, 123)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
+size = Vector2(100, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5ni7"]
+size = Vector2(78.25, 76.5)
+
+[node name="CombatScene" type="Node2D" unique_id=1615110680]
+position = Vector2(-1, 34)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=810811121]
+
+[node name="MobZonePanel" type="Panel" parent="." unique_id=2970752]
+offset_left = -127.0
+offset_top = -240.0
+offset_right = 119.0
+offset_bottom = -70.0
+
+[node name="FieldZonePanel" type="Panel" parent="." unique_id=1586173171]
+offset_left = -371.0
+offset_top = -33.0
+offset_right = 381.0
+offset_bottom = 147.0
+metadata/_edit_use_anchors_ = true
+
+[node name="HandZone_Area2D" type="Area2D" parent="." unique_id=904082719]
+position = Vector2(-66, 239)
+
+[node name="Hand_CollisionShape2D" type="CollisionShape2D" parent="HandZone_Area2D" unique_id=671653038]
+position = Vector2(-30, 70)
+shape = SubResource("RectangleShape2D_nbkot")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=124383908]
+
+[node name="PlayerHPLabel" type="Label" parent="CanvasLayer" unique_id=1372277561]
+offset_left = 13.0
+offset_top = 10.0
+offset_right = 213.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 16
+text = "HP: 50"
+metadata/_edit_use_anchors_ = true
+
+[node name="EnergyLabel" type="Label" parent="CanvasLayer" unique_id=494232948]
+offset_left = 73.0
+offset_top = 9.0
+offset_right = 273.0
+offset_bottom = 39.0
+theme_override_font_sizes/font_size = 16
+text = "3/3 Energy"
+metadata/_edit_use_anchors_ = true
+
+[node name="MobNameLabel" type="Label" parent="CanvasLayer" unique_id=351438004]
+offset_left = 534.0
+offset_top = 188.0
+offset_right = 734.0
+offset_bottom = 218.0
+theme_override_font_sizes/font_size = 16
+text = "Mr. Kiwi"
+
+[node name="MobHPLabel" type="Label" parent="CanvasLayer" unique_id=379572861]
+offset_left = 536.0
+offset_top = 219.0
+offset_right = 736.0
+offset_bottom = 249.0
+theme_override_font_sizes/font_size = 13
+text = "HP: 40/40"
+
+[node name="DeckLabel" type="Label" parent="CanvasLayer" unique_id=299698568]
+offset_left = 58.0
+offset_top = 585.0
+offset_right = 178.0
+offset_bottom = 609.0
+theme_override_font_sizes/font_size = 13
+text = "Deck: 14"
+
+[node name="GraveyardLabel" type="Label" parent="CanvasLayer" unique_id=679966139]
+offset_left = 1022.0
+offset_top = 584.0
+offset_right = 1142.0
+offset_bottom = 608.0
+theme_override_font_sizes/font_size = 13
+text = "GY: 0"
+
+[node name="EndTurnButton" type="Button" parent="CanvasLayer" unique_id=1792288462]
+offset_left = 957.0
+offset_top = 508.0
+offset_right = 1117.0
+offset_bottom = 544.0
+theme_override_font_sizes/font_size = 14
+text = "End Turn"
+
+[node name="DG_Node2D" type="Node2D" parent="." unique_id=87635787]
+
+[node name="Deck_TextureRect" type="TextureRect" parent="DG_Node2D" unique_id=1399294230]
+offset_left = -432.0
+offset_top = 171.0
+offset_right = -392.0
+offset_bottom = 211.0
+
+[node name="Graveyard" type="TextureRect" parent="DG_Node2D" unique_id=203106155]
+offset_left = 359.0
+offset_top = 186.0
+offset_right = 399.0
+offset_bottom = 226.0
+
+[node name="DeckZone" type="Area2D" parent="DG_Node2D" unique_id=549107531]
+position = Vector2(-520, 230)
+
+[node name="DeckZoneShape" type="CollisionShape2D" parent="DG_Node2D/DeckZone" unique_id=327161038]
+shape = SubResource("RectangleShape2D_zone")
+
+[node name="DeckPanel" type="Panel" parent="DG_Node2D/DeckZone" unique_id=248764966]
+offset_right = 100.0
+offset_bottom = 80.0
+
+[node name="GraveyardZone" type="Area2D" parent="DG_Node2D" unique_id=1705026824]
+position = Vector2(420, 230)
+
+[node name="GraveyardZoneShape" type="CollisionShape2D" parent="DG_Node2D/GraveyardZone" unique_id=2128233533]
+shape = SubResource("RectangleShape2D_zone")
+
+[node name="GraveyardPanel" type="Panel" parent="DG_Node2D/GraveyardZone" unique_id=130081156]
+offset_right = 100.0
+offset_bottom = 80.0
+
+[node name="PlayerField_Node2D" type="Node2D" parent="." unique_id=120861347]
+
+[node name="CardSlot1_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1707097618]
+position = Vector2(-203, 53)
+
+[node name="Slot1Collision" type="CollisionShape2D" parent="PlayerField_Node2D/CardSlot1_Area2D" unique_id=439651159]
+shape = SubResource("RectangleShape2D_s5ni7")
+
+[node name="SlotPanel1" type="Panel" parent="PlayerField_Node2D/CardSlot1_Area2D" unique_id=1743195508]
+offset_left = -65.0
+offset_top = -85.0
+offset_right = 65.0
+offset_bottom = 85.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CardSlot2_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1393293509]
+position = Vector2(0, 80)
+
+[node name="Slot2Collision" type="CollisionShape2D" parent="PlayerField_Node2D/CardSlot2_Area2D" unique_id=18493470]
+shape = SubResource("RectangleShape2D_s5ni7")
+
+[node name="SlotPanel2" type="Panel" parent="PlayerField_Node2D/CardSlot2_Area2D" unique_id=805417087]
+offset_left = -62.0
+offset_top = -110.0
+offset_right = 68.0
+offset_bottom = 60.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CardSlot3_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1109166814]
+position = Vector2(205, 55)
+
+[node name="Slot3Collision" type="CollisionShape2D" parent="PlayerField_Node2D/CardSlot3_Area2D" unique_id=2104040245]
+shape = SubResource("RectangleShape2D_s5ni7")
+
+[node name="SlotPanel3" type="Panel" parent="PlayerField_Node2D/CardSlot3_Area2D" unique_id=788641041]
+offset_left = -65.0
+offset_top = -85.0
+offset_right = 65.0
+offset_bottom = 85.0
+metadata/_edit_use_anchors_ = true
+
+[node name="MobContainerNode2D" type="Node2D" parent="." unique_id=2051815598]
+position = Vector2(1, -160)
+
+[node name="GamerManager_Node" type="Node" parent="." unique_id=1532285235]
+script = ExtResource("1_nbkot")
+
+[connection signal="pressed" from="CanvasLayer/EndTurnButton" to="GamerManager_Node" method="end_turn"]

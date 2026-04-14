@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dkx4p8n2m7y3j"]
+
+[ext_resource type="Script" path="res://Scripts/lose_screen.gd" id="1_script"]
+
+[node name="LoseScreen" type="CanvasLayer"]
+layer = 10
+process_mode = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0, 0, 0, 0.7)
+
+[node name="DefeatLabel" type="Label" parent="."]
+offset_left = 376.0
+offset_top = 250.0
+offset_right = 776.0
+offset_bottom = 315.0
+theme_override_font_sizes/font_size = 48
+text = "Defeat!"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="."]
+offset_left = 476.0
+offset_top = 350.0
+offset_right = 676.0
+offset_bottom = 400.0
+theme_override_font_sizes/font_size = 24
+text = "Retry"

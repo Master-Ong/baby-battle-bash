@@ -1,0 +1,168 @@
+BABY BATTLE BASH - AI ROLE SPLIT CHEAT SHEET
+
+Use this when deciding which AI to ask.
+
+--------------------------------------------------
+WHO DOES WHAT
+--------------------------------------------------
+
+YOU = Creative Director
+- You decide the vision
+- You decide what feels fun
+- You choose the final direction
+
+CHATGPT = Brain / Planner / Explainer
+Use ChatGPT when:
+- Your idea is messy and you need clarity
+- You want a feature broken into simple steps
+- You want bugs explained in plain English
+- You want a checklist before building
+- You want help deciding what to build next
+- You want a prompt prepared for Claude or Claude Code
+
+Simple version:
+ChatGPT helps you THINK clearly.
+
+CLAUDE = Architect
+Use Claude when:
+- You know what feature you want
+- You want the cleanest Godot structure
+- You want help deciding what scenes/scripts are needed
+- You want a system planned before coding
+- You want implementation strategy
+
+Simple version:
+Claude decides the best STRUCTURE.
+
+CLAUDE CODE = Builder
+Use Claude Code when:
+- The plan is ready
+- You want files created or edited in the project
+- You want scripts updated directly
+- You want the feature actually built
+- You want the project changed inside Godot files
+
+Simple version:
+Claude Code does the BUILDING.
+
+GEMINI = Designer / Style Helper
+Use Gemini when:
+- You want UI ideas
+- You want art prompt variations
+- You want naming ideas
+- You want several creative directions to choose from
+- You want help with visual feel, flavor, or presentation
+
+Simple version:
+Gemini helps with LOOK and STYLE.
+
+--------------------------------------------------
+THE BEST WORKFLOW
+--------------------------------------------------
+
+1. Start with ChatGPT
+Ask:
+"Help me define this feature clearly."
+
+2. Move to Claude
+Ask:
+"What is the best Godot structure for this feature?"
+
+3. Move to Claude Code
+Ask:
+"Build this inside my project."
+
+4. Use Gemini if needed
+Ask:
+"Give me visual/UI/art directions for this feature."
+
+--------------------------------------------------
+EASY RULE TO REMEMBER
+--------------------------------------------------
+
+When you are CONFUSED -> use ChatGPT
+When you need CLEAN STRUCTURE -> use Claude
+When you need it BUILT -> use Claude Code
+When you want it to LOOK BETTER -> use Gemini
+
+--------------------------------------------------
+REAL EXAMPLES
+--------------------------------------------------
+
+EXAMPLE 1: Drag and Drop
+ChatGPT:
+"Help me define exactly how drag-and-drop should work."
+
+Claude:
+"What is the best Godot scene/script structure for drag-and-drop animal cards?"
+
+Claude Code:
+"Build drag-and-drop for animal cards into field slots."
+
+Gemini:
+"What should the hover glow, slot highlight, and drop feedback look like?"
+
+EXAMPLE 2: Reward Screen
+ChatGPT:
+"Help me define the reward flow and player choices."
+
+Claude:
+"What files and node structure should the reward screen use?"
+
+Claude Code:
+"Build reward_screen.tscn and reward_screen.gd."
+
+Gemini:
+"Give me 3 reward screen visual directions for a cozy kid-friendly deckbuilder."
+
+EXAMPLE 3: Bug Fixing
+ChatGPT:
+"Here is the error and screenshot. Explain what probably broke and what to test first."
+
+Claude:
+"Given this bug, what is the likely structural cause in Godot?"
+
+Claude Code:
+"Apply the fix in the project files."
+
+Gemini:
+Usually not needed unless the bug is visual/UI related.
+
+--------------------------------------------------
+WHAT NOT TO DO
+--------------------------------------------------
+
+Do NOT ask all 3 AIs to solve the same coding problem.
+That causes:
+- too many different answers
+- confusion
+- wasted time
+- conflicting code directions
+
+Bad:
+"ChatGPT, Claude, and Gemini all design my drag-and-drop system."
+
+Better:
+- ChatGPT defines it
+- Claude structures it
+- Claude Code builds it
+- Gemini styles it
+
+--------------------------------------------------
+BEST DEFAULT TEAM SETUP
+--------------------------------------------------
+
+ChatGPT = Product brain + debug explainer + planner
+Claude = Architecture + implementation strategy
+Claude Code = Project builder
+Gemini = Design partner + creative option generator
+
+--------------------------------------------------
+ONE-SENTENCE SUMMARY
+--------------------------------------------------
+
+ChatGPT helps you think.
+Claude helps you structure.
+Claude Code helps you build.
+Gemini helps you style.
+
