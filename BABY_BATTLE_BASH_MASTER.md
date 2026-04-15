@@ -293,8 +293,94 @@ Load the seed number in PixelLab to get consistent results across sessions.
 ## Progress Tracker
 
 ### MAJOR MILESTONE REACHED ✓
-**First full playable combat loop with victory screen — April 2026**
-Complete combat loop working end to end. Cards drag to field. Strike deals damage. End Turn resolves combat. Win condition fires and shows victory screen with 3 card reward options.
+**Full game flow working end to end — April 2026**
+Main Menu → Animal Select (stub) → Combat → Victory/Defeat all connected and working.
+
+### Done ✓ (Complete list)
+- [x] Combat scene node structure built in Godot
+- [x] GameManager script — deck, energy, turn flow all working
+- [x] Card.gd — enum is ATTACK(0), SKILL(1), ANIMAL(2), COLOR(3), WORD(4)
+- [x] card.tscn and card_display.gd built
+- [x] Cards spawning visually in hand zone — all 5 visible
+- [x] HP, Energy, Mr. Kiwi name and HP all showing on screen
+- [x] End Turn button working and positioned bottom right
+- [x] Card type routing — ATTACK/SKILL/ANIMAL/COLOR all handled
+- [x] play_attack_card — deals 6 damage to mob, costs 1 energy
+- [x] play_skill_card — gives player 5 block, costs 1 energy
+- [x] play_animal_card — drag to field slot, free, no energy cost
+- [x] field_slots Dictionary — tracks slot occupancy {0: left, 1: center, 2: right}
+- [x] resolve_combat() — animals attack mob, mob deals 10 dmg, player takes damage if field empty
+- [x] win_combat() — fires victory screen when mob HP hits 0
+- [x] lose_combat() — fires lose screen when player HP hits 0
+- [x] draw_cards with graveyard shuffle refill
+- [x] Opening hand guarantee — at least 2 Bunny cards on turn 1
+- [x] Bunny animal cards in starting deck (3 Bunnies, ATK 4, HP 12)
+- [x] spawn_field_visuals() — world space, no duplication, preserves slot panels
+- [x] Card drag and drop — grabs from center, drops centered in slot, snaps back if invalid
+- [x] Input fix — MOUSE_FILTER_IGNORE on Control children, physics picking enabled
+- [x] Field animal input disabled after drop — set_process(false) + input_pickable = false
+- [x] Debug print spam removed
+- [x] Card enum mismatch fixed — setup() uses enum names
+- [x] Field duplication bug fixed, slot panels preserved
+- [x] mob_damage = 10, double turn increment fixed
+- [x] reward_screen.tscn and reward_screen.gd — shows 3 card options after victory
+- [x] lose_screen.tscn and lose_screen.gd — Defeat overlay with Retry button
+- [x] Retry fix — queue_free() before scene reload, process_mode WHEN_PAUSED
+- [x] main_menu.tscn and main_menu.gd — title, Play, Exit buttons
+- [x] animal_select.tscn and animal_select.gd — stub scene with Start button
+- [x] project.godot — game starts at main menu
+- [x] Full scene flow connected end to end
+- [x] GitHub repository at github.com/Master-Ong/baby-battle-bash
+- [x] .gitignore configured for Godot cache files
+- [x] CLAUDE.md — CC reads rules automatically on every startup
+- [x] ChatGPT constraints block saved in master doc
+- [x] Art pipeline — Hamster variants, Gorilla mob boss with idle animation
+- [x] Rabbit family designed — Bunny/Rabbit/Fluffle stats and color variants
+
+### In Progress 🔄
+- [ ] Animal select — stub exists, real selection logic not built
+- [ ] Reward card pool — placeholder only
+
+### Up Next 📋
+- [ ] Real animal select — 3 starters: Bunny/Turtle/Dog with GameState autoload
+- [ ] Turtle family card data (Defense type)
+- [ ] Dog family card data (Power type)
+- [ ] Expand reward card pool
+- [ ] Second mob encounter after Mr. Kiwi
+- [ ] Map/roadmap — node types: mob, elite, shop, rest, chest, boss
+- [ ] Visual polish — card art, backgrounds, UI styling
+- [ ] Playtesting
+
+### Build Order (confirmed)
+1. Real animal select + GameState autoload ← next
+2. Turtle and Dog card data
+3. Expand reward pool
+4. Second mob encounter
+5. Map/roadmap (last)
+
+### Current Scene Flow
+```
+Main Menu → Animal Select (stub) → Combat → Victory/Defeat
+```
+
+### Known Remaining Issues 🔧
+- Animal select is stub only
+- Reward card pool is placeholder only
+- UID warnings on some scenes — harmless
+
+### Current Scene Layout (confirmed working)
+- HP and Energy — top left
+- Mr. Kiwi — top center
+- Field zone — 3 slots centered
+- Hand zone — bottom center
+- Deck/GY — bottom corners
+- End Turn — bottom right
+
+### Workflow
+- ChatGPT — simplify, draft prompts, brainstorm
+- Claude.ai — verify files, architect, debug, teach, maintain docs
+- Claude Code — build only after Claude.ai approves
+- GitHub push at end of every session with git add . / git commit / git push
 
 ### Done ✓ (Complete list)
 - [x] Combat scene node structure built in Godot
