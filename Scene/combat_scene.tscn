@@ -6,7 +6,7 @@
 size = Vector2(576, 123)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
-size = Vector2(100, 80)
+size = Vector2(140, 77)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s5ni7"]
 size = Vector2(78.25, 76.5)
@@ -30,10 +30,10 @@ offset_bottom = 147.0
 metadata/_edit_use_anchors_ = true
 
 [node name="HandZone_Area2D" type="Area2D" parent="." unique_id=904082719]
-position = Vector2(-66, 239)
+position = Vector2(-50, 231)
 
 [node name="Hand_CollisionShape2D" type="CollisionShape2D" parent="HandZone_Area2D" unique_id=671653038]
-position = Vector2(-30, 70)
+position = Vector2(9, 106)
 shape = SubResource("RectangleShape2D_nbkot")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=124383908]
@@ -81,26 +81,26 @@ theme_override_font_sizes/font_size = 13
 text = "ATK: 8"
 
 [node name="DeckLabel" type="Label" parent="CanvasLayer" unique_id=299698568]
-offset_left = 58.0
-offset_top = 585.0
-offset_right = 178.0
-offset_bottom = 609.0
+offset_left = 79.0
+offset_top = 583.0
+offset_right = 199.0
+offset_bottom = 607.0
 theme_override_font_sizes/font_size = 13
 text = "Deck: 14"
 
 [node name="GraveyardLabel" type="Label" parent="CanvasLayer" unique_id=679966139]
 offset_left = 1022.0
-offset_top = 584.0
+offset_top = 591.0
 offset_right = 1142.0
-offset_bottom = 608.0
+offset_bottom = 615.0
 theme_override_font_sizes/font_size = 13
 text = "GY: 0"
 
 [node name="EndTurnButton" type="Button" parent="CanvasLayer" unique_id=1792288462]
-offset_left = 953.0
-offset_top = 523.0
-offset_right = 1113.0
-offset_bottom = 559.0
+offset_left = 957.0
+offset_top = 511.0
+offset_right = 1117.0
+offset_bottom = 547.0
 theme_override_font_sizes/font_size = 14
 text = "End Turn"
 
@@ -129,41 +129,44 @@ offset_right = 100.0
 offset_bottom = 80.0
 
 [node name="GraveyardZone" type="Area2D" parent="DG_Node2D" unique_id=1705026824]
-position = Vector2(420, 230)
+position = Vector2(412, 224)
 
 [node name="GraveyardZoneShape" type="CollisionShape2D" parent="DG_Node2D/GraveyardZone" unique_id=2128233533]
+position = Vector2(39, 61)
 shape = SubResource("RectangleShape2D_zone")
 
 [node name="GraveyardPanel" type="Panel" parent="DG_Node2D/GraveyardZone" unique_id=130081156]
-offset_right = 100.0
-offset_bottom = 80.0
+offset_left = 6.0
+offset_top = 14.0
+offset_right = 106.0
+offset_bottom = 94.0
 
 [node name="PlayerField_Node2D" type="Node2D" parent="." unique_id=120861347]
 
 [node name="CardSlot1_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1707097618]
-position = Vector2(-203, 53)
+position = Vector2(-204, 58)
 
 [node name="Slot1Collision" type="CollisionShape2D" parent="PlayerField_Node2D/CardSlot1_Area2D" unique_id=439651159]
 shape = SubResource("RectangleShape2D_s5ni7")
 
 [node name="SlotPanel1" type="Panel" parent="PlayerField_Node2D/CardSlot1_Area2D" unique_id=1743195508]
-offset_left = -71.0
-offset_top = -87.0
-offset_right = 59.0
-offset_bottom = 83.0
+offset_left = -66.0
+offset_top = -91.0
+offset_right = 64.0
+offset_bottom = 79.0
 metadata/_edit_use_anchors_ = true
 
 [node name="CardSlot2_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1393293509]
-position = Vector2(0, 80)
+position = Vector2(0, 53)
 
 [node name="Slot2Collision" type="CollisionShape2D" parent="PlayerField_Node2D/CardSlot2_Area2D" unique_id=18493470]
 shape = SubResource("RectangleShape2D_s5ni7")
 
 [node name="SlotPanel2" type="Panel" parent="PlayerField_Node2D/CardSlot2_Area2D" unique_id=805417087]
-offset_left = -58.0
-offset_top = -108.0
-offset_right = 72.0
-offset_bottom = 62.0
+offset_left = -67.0
+offset_top = -84.0
+offset_right = 63.0
+offset_bottom = 86.0
 metadata/_edit_use_anchors_ = true
 
 [node name="CardSlot3_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1109166814]
@@ -173,10 +176,10 @@ position = Vector2(205, 55)
 shape = SubResource("RectangleShape2D_s5ni7")
 
 [node name="SlotPanel3" type="Panel" parent="PlayerField_Node2D/CardSlot3_Area2D" unique_id=788641041]
-offset_left = -65.0
-offset_top = -85.0
-offset_right = 65.0
-offset_bottom = 85.0
+offset_left = -48.0
+offset_top = -111.0
+offset_right = 82.0
+offset_bottom = 59.0
 metadata/_edit_use_anchors_ = true
 
 [node name="MobContainerNode2D" type="Node2D" parent="." unique_id=2051815598]

@@ -402,36 +402,23 @@ func clear_hand_visuals():
 # Cards are children of PlayerField_Node2D in world space.
 # Slot 0 → Vector2(-200, 0), Slot 1 → Vector2(0, 0), Slot 2 → Vector2(200, 0).
 func spawn_field_visuals():
-	var root = get_tree().root.get_node("CombatScene")
-	var slot_nodes = [
-		root.get_node("PlayerField_Node2D/CardSlot1_Area2D"),
-		root.get_node("PlayerField_Node2D/CardSlot2_Area2D"),
-		root.get_node("PlayerField_Node2D/CardSlot3_Area2D"),
-	]
-	for slot in slot_nodes:
-		for child in slot.get_children():
-			if child.name != "SlotPanel1" and child.name != "SlotPanel2" \
-					and child.name != "SlotPanel3" and child.name != "Slot1Collision" \
-					and child.name != "Slot2Collision" and child.name != "Slot3Collision":
-				child.queue_free()
-
 	for visual in field_visuals:
 		visual.queue_free()
 	field_visuals.clear()
 
-	var field_node    = get_tree().root.get_node("CombatScene/PlayerField_Node2D")
+	var field_node = get_tree().root.get_node("CombatScene/PlayerField_Node2D")
 	var slot_positions = {
 		0: Vector2(-200, 0),
 		1: Vector2(0, 0),
 		2: Vector2(200, 0),
 	}
 
-	for i in field_slots:
-		if field_slots[i] != null:
+	for slot_key in field_slots:
+		if field_slots[slot_key] != null:
 			var card_node = CardScene.instantiate()
 			field_node.add_child(card_node)
-			card_node.setup(field_slots[i])
-			card_node.position = slot_positions[i]
+			card_node.setup(field_slots[slot_key])
+			card_node.position = slot_positions[slot_key]
 			field_visuals.append(card_node)
 
 
@@ -480,34 +467,47 @@ func play_attack_card(card, card_visual):
 	update_hud()
 
 
-# Play a skill card: spend energy, add effect_value to player_defense, send to graveyard.
+# Play a skill card: spend energy, apply effect, send to graveyard.
 func play_skill_card(card, card_visual):
 	if not can_play_card(card):
 		print("Not enough energy")
 		return
 	spend_energy(card.energy_cost)
-	player_defense += card.effect_value
-	print("Gained " + str(card.effect_value) + " block")
 	graveyard.append(card)
 	hand.erase(card)
 	hand_visuals.erase(card_visual)
 	card_visual.queue_free()
-	update_hud()
+	if card.card_name == "Run Away":
+		draw_cards(1)
+		update_hud()
+	else:
+		player_defense += card.effect_value
+		print("Gained " + str(card.effect_value) + " block")
+		update_hud()
 
 
-# Play a color or word card: spend energy, buff all field animals, send to graveyard.
+# Play a color or word card: spend energy, apply effect, send to graveyard.
 func play_color_or_word_card(card, card_visual):
 	if not can_play_card(card):
 		print("Not enough energy")
 		return
 	spend_energy(card.energy_cost)
-	for animal in get_field_animals():
-		animal.animal_atk += card.effect_value
 	graveyard.append(card)
 	hand.erase(card)
 	hand_visuals.erase(card_visual)
 	card_visual.queue_free()
-	update_hud()
+	if card.card_name == "Blue":
+		draw_cards(1)
+		update_hud()
+	elif card.card_name == "Green":
+		player_hp = min(player_hp + card.effect_value, 50)
+		print("Healed ", card.effect_value, " HP — HP: ", player_hp)
+		update_hud()
+	else:
+		for animal in get_field_animals():
+			animal.animal_atk += card.effect_value
+		spawn_field_visuals()
+		update_hud()
 
 
 # =====================================================================

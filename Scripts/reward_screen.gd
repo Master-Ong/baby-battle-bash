@@ -116,7 +116,7 @@ func pick_rewards() -> void:
 	blue.card_type        = CardClass.CardType.COLOR
 	blue.energy_cost      = 1
 	blue.effect_value     = 1
-	blue.card_description = "Buff field animals +1 ATK"
+	blue.card_description = "Draw 1 card."
 	color_pool.append(blue)
 
 	var red = CardClass.new()
@@ -131,8 +131,8 @@ func pick_rewards() -> void:
 	green.card_name        = "Green"
 	green.card_type        = CardClass.CardType.COLOR
 	green.energy_cost      = 1
-	green.effect_value     = 1
-	green.card_description = "Buff field animals +1 ATK"
+	green.effect_value     = 3
+	green.card_description = "Heal 3 HP."
 	color_pool.append(green)
 
 	# --- Word pool ---
@@ -160,7 +160,7 @@ func pick_rewards() -> void:
 	run_away.card_type        = CardClass.CardType.SKILL
 	run_away.energy_cost      = 1
 	run_away.effect_value     = 2
-	run_away.card_description = "Gain 2 Block. Draw feel."
+	run_away.card_description = "Draw 1 card."
 	word_pool.append(run_away)
 
 	var bite = CardClass.new()

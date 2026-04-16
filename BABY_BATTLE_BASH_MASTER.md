@@ -337,7 +337,16 @@ Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward pe
 - [x] prompt.txt workflow — paste long prompts via file
 
 ### In Progress 🔄
-- [ ] Color/Word v1 effects — prompt ready, not yet confirmed working
+- [ ] Field visual bugs being fixed — prompt sent to CC
+- [ ] Run Away draw behavior needs separate testing confirmation
+
+### Recently Completed This Session ✓
+- [x] Blue card — draws 1 card when played
+- [x] Green card — heals player 3 HP when played
+- [x] Red card — buffs field animals +2 ATK (visual refresh fix in progress)
+- [x] Run Away — draws 1 card instead of giving block
+- [x] Order of operations fix — card removed from hand before draw_cards(1) fires
+- [x] Field slot position fix — slot 0=left, 1=center, 2=right preserved after End Turn
 
 ### Up Next 📋
 - [ ] Test and confirm Blue/Green/Run Away effects work correctly

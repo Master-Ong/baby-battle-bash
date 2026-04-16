@@ -1,19 +1,49 @@
 In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
-Read CLAUDE.md, res://Scripts/GameState.gd, res://Scripts/reward_screen.gd, and res://Scripts/gamer_manager_node.gd first.
-Problem: reward card is added to the current deck in memory but lost when combat_scene.tscn reloads because build_starting_deck() rebuilds the deck from scratch every time.
-Fix using GameState as the persistence layer. Three changes only.
-Change 1 — Update res://Scripts/GameState.gd:
-Add a new variable:
-gdscriptvar reward_cards: Array = []
-Change 2 — Update res://Scripts/reward_screen.gd:
-In the function that handles card selection, instead of adding the card directly to the GameManager deck, store it in GameState like this:
-gdscriptGameState.reward_cards.append(selected_card)
-Then change scene to combat_scene.tscn as normal.
-Change 3 — Update res://Scripts/gamer_manager_node.gd:
-At the end of build_starting_deck(), after the base deck is built, add any cards stored in GameState.reward_cards to the deck:
-gdscriptfor card in GameState.reward_cards:
-    deck.append(card)
-if GameState.reward_cards.size() > 0:
-    print("Added ", GameState.reward_cards.size(), " reward cards to deck.")
-Do not clear GameState.reward_cards after adding — they should persist for the entire run. Do not touch lose screen, menu, animal select, or combat logic.
-List every file changed, explain why the fix works, and give a short test plan.
+
+Read CLAUDE.md and res://Scripts/gamer_manager_node.gd first.
+
+Fix two bugs in field visual display. Smallest safe patch only.
+
+Bug 1 — Red buff does not update field card visuals:
+In play_color_or_word_card(), after the Red-style ATK buff branch, refresh the field visuals so the displayed ATK on field cards updates immediately.
+
+Bug 2 — Field animals shift position after End Turn:
+In spawn_field_visuals(), the current loop is likely rebuilding positions from sequential order instead of preserving exact slot placement.
+Fix it so slot 0 always maps to left, slot 1 to center, slot 2 to right using field_slots as the source of truth.
+
+Implementation details:
+- Use the real current field data structure already present in gamer_manager_node.gd
+- If get_field_animals() already exists, use it
+- If not, use field_slots / field_animals directly instead of inventing a new helper
+- Preserve the same visual centering/alignment the cards already use in the working combat scene
+- Do not introduce a new offset mistake while fixing slot order
+
+Target spawn_field_visuals() pattern:
+func spawn_field_visuals():
+    for visual in field_visuals:
+        visual.queue_free()
+    field_visuals.clear()
+
+    var field_node = get_tree().root.get_node("CombatScene/PlayerField_Node2D")
+    var slot_positions = {
+        0: Vector2(-200, 0),
+        1: Vector2(0, 0),
+        2: Vector2(200, 0),
+    }
+
+    for slot_key in field_slots:
+        if field_slots[slot_key] != null:
+            var card_node = CardScene.instantiate()
+            field_node.add_child(card_node)
+            card_node.setup(field_slots[slot_key])
+            card_node.position = slot_positions[slot_key]
+            field_visuals.append(card_node)
+
+Important:
+- Do not touch reward, lose, menu, animal select, GameState, or card drag logic
+- Keep the patch minimal
+
+After the patch:
+1. List every file changed
+2. Give a short test plan
+3. Confirm whether Run Away draw behavior still needs separate testing
