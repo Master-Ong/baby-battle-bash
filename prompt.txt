@@ -1,0 +1,19 @@
+In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
+Read CLAUDE.md, res://Scripts/GameState.gd, res://Scripts/reward_screen.gd, and res://Scripts/gamer_manager_node.gd first.
+Problem: reward card is added to the current deck in memory but lost when combat_scene.tscn reloads because build_starting_deck() rebuilds the deck from scratch every time.
+Fix using GameState as the persistence layer. Three changes only.
+Change 1 — Update res://Scripts/GameState.gd:
+Add a new variable:
+gdscriptvar reward_cards: Array = []
+Change 2 — Update res://Scripts/reward_screen.gd:
+In the function that handles card selection, instead of adding the card directly to the GameManager deck, store it in GameState like this:
+gdscriptGameState.reward_cards.append(selected_card)
+Then change scene to combat_scene.tscn as normal.
+Change 3 — Update res://Scripts/gamer_manager_node.gd:
+At the end of build_starting_deck(), after the base deck is built, add any cards stored in GameState.reward_cards to the deck:
+gdscriptfor card in GameState.reward_cards:
+    deck.append(card)
+if GameState.reward_cards.size() > 0:
+    print("Added ", GameState.reward_cards.size(), " reward cards to deck.")
+Do not clear GameState.reward_cards after adding — they should persist for the entire run. Do not touch lose screen, menu, animal select, or combat logic.
+List every file changed, explain why the fix works, and give a short test plan.

@@ -145,6 +145,7 @@ func update_hud():
 	root.get_node("CanvasLayer/EnergyLabel").text    = str(current_energy) + "/" + str(max_energy) + " Energy"
 	root.get_node("CanvasLayer/MobNameLabel").text   = mob_name
 	root.get_node("CanvasLayer/MobHPLabel").text     = "HP: " + str(mob_hp) + "/" + str(mob_max_hp)
+	root.get_node("CanvasLayer/MobATKLabel").text    = "ATK: " + str(mob_damage)
 	root.get_node("CanvasLayer/DeckLabel").text      = "Deck: " + str(deck.size())
 	root.get_node("CanvasLayer/GraveyardLabel").text = "GY: " + str(graveyard.size())
 
@@ -152,43 +153,110 @@ func update_hud():
 # =====================================================================
 # SECTION 11 — STARTING DECK
 # =====================================================================
+# TODO: expand these starters as the game grows
 func build_starting_deck():
 	deck.clear()
+	match GameState.selected_starter:
+		"Turtle":
+			_build_turtle_deck()
+		"Dog":
+			_build_dog_deck()
+		_:
+			_build_bunny_deck()
+	for card in GameState.reward_cards:
+		deck.append(card)
+	if GameState.reward_cards.size() > 0:
+		print("Added ", GameState.reward_cards.size(), " reward cards to deck.")
 
+
+func _build_bunny_deck():
 	for i in 10:
 		var strike = CardClass.new()
-		strike.card_name        = "Strike"
-		strike.card_type        = CardClass.CardType.ATTACK
-		strike.energy_cost      = 1
-		strike.effect_value     = 6
+		strike.card_name = "Strike"
+		strike.card_type = CardClass.CardType.ATTACK
+		strike.energy_cost = 1
+		strike.effect_value = 6
 		strike.card_description = "Deal 6 damage."
 		deck.append(strike)
-
 	for i in 4:
 		var defend = CardClass.new()
-		defend.card_name        = "Defend"
-		defend.card_type        = CardClass.CardType.SKILL
-		defend.energy_cost      = 1
-		defend.effect_value     = 5
+		defend.card_name = "Defend"
+		defend.card_type = CardClass.CardType.SKILL
+		defend.energy_cost = 1
+		defend.effect_value = 5
 		defend.card_description = "Gain 5 Block."
 		deck.append(defend)
-
 	for i in 3:
 		var bunny = CardClass.new()
-		bunny.card_name        = "Bunny"
-		bunny.card_type        = CardClass.CardType.ANIMAL
-		bunny.energy_cost      = 0
-		bunny.effect_value     = 0
-		bunny.animal_hp        = 12
-		bunny.animal_atk       = 4
-		bunny.animal_defense   = 2
+		bunny.card_name = "Bunny"
+		bunny.card_type = CardClass.CardType.ANIMAL
+		bunny.energy_cost = 0
+		bunny.animal_hp = 12
+		bunny.animal_atk = 4
+		bunny.animal_defense = 2
 		bunny.card_description = "ATK: 4 | HP: 12"
 		deck.append(bunny)
+	print("Deck built: Bunny starter")
 
-	print("Deck built: ", deck.size(), " cards (10 Strikes + 4 Defends + 3 Bunnies)")
+
+func _build_turtle_deck():
+	for i in 10:
+		var strike = CardClass.new()
+		strike.card_name = "Strike"
+		strike.card_type = CardClass.CardType.ATTACK
+		strike.energy_cost = 1
+		strike.effect_value = 6
+		strike.card_description = "Deal 6 damage."
+		deck.append(strike)
+	for i in 4:
+		var defend = CardClass.new()
+		defend.card_name = "Defend"
+		defend.card_type = CardClass.CardType.SKILL
+		defend.energy_cost = 1
+		defend.effect_value = 5
+		defend.card_description = "Gain 5 Block."
+		deck.append(defend)
+	for i in 3:
+		var turtle = CardClass.new()
+		turtle.card_name = "Turtle"
+		turtle.card_type = CardClass.CardType.ANIMAL
+		turtle.energy_cost = 0
+		turtle.animal_hp = 20
+		turtle.animal_atk = 2
+		turtle.animal_defense = 5
+		turtle.card_description = "ATK: 2 | HP: 20"
+		deck.append(turtle)
+	print("Deck built: Turtle starter")
 
 
-# =====================================================================
+func _build_dog_deck():
+	for i in 10:
+		var strike = CardClass.new()
+		strike.card_name = "Strike"
+		strike.card_type = CardClass.CardType.ATTACK
+		strike.energy_cost = 1
+		strike.effect_value = 6
+		strike.card_description = "Deal 6 damage."
+		deck.append(strike)
+	for i in 4:
+		var defend = CardClass.new()
+		defend.card_name = "Defend"
+		defend.card_type = CardClass.CardType.SKILL
+		defend.energy_cost = 1
+		defend.effect_value = 5
+		defend.card_description = "Gain 5 Block."
+		deck.append(defend)
+	for i in 3:
+		var dog = CardClass.new()
+		dog.card_name = "Dog"
+		dog.card_type = CardClass.CardType.ANIMAL
+		dog.energy_cost = 0
+		dog.animal_hp = 10
+		dog.animal_atk = 8
+		dog.animal_defense = 1
+		dog.card_description = "ATK: 8 | HP: 10"
+		deck.append(dog)
+	print("Deck built: Dog starter")
 # SECTION 12 — TURN FLOW
 # =====================================================================
 
@@ -458,35 +526,10 @@ func take_mob_damage(amount: int):
 func win_combat():
 	print("You defeated ", mob_name, "!")
 
-	# Build the three reward card options
-	var bunny = CardClass.new()
-	bunny.card_name        = "Bunny"
-	bunny.card_type        = CardClass.CardType.ANIMAL
-	bunny.energy_cost      = 0
-	bunny.effect_value     = 0
-	bunny.animal_hp        = 12
-	bunny.animal_atk       = 4
-	bunny.animal_defense   = 2
-	bunny.card_description = "ATK: 4 | HP: 12"
-
-	var blue = CardClass.new()
-	blue.card_name        = "Blue"
-	blue.card_type        = CardClass.CardType.COLOR
-	blue.energy_cost      = 1
-	blue.effect_value     = 1
-	blue.card_description = "Draw +1 card next turn."
-
-	var power_strike = CardClass.new()
-	power_strike.card_name        = "Power Strike"
-	power_strike.card_type        = CardClass.CardType.ATTACK
-	power_strike.energy_cost      = 1
-	power_strike.effect_value     = 8
-	power_strike.card_description = "Deal 8 damage."
-
-	# Spawn the reward screen and show it on top of the combat scene
+	# Spawn the reward screen — it builds its own pools and picks 3 cards
 	var reward = RewardScene.instantiate()
 	get_tree().root.get_node("CombatScene").add_child(reward)
-	reward.show_rewards([bunny, blue, power_strike])
+	reward.pick_rewards()
 
 	get_tree().paused = true
 

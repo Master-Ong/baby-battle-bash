@@ -57,20 +57,28 @@ text = "3/3 Energy"
 metadata/_edit_use_anchors_ = true
 
 [node name="MobNameLabel" type="Label" parent="CanvasLayer" unique_id=351438004]
-offset_left = 534.0
-offset_top = 188.0
-offset_right = 734.0
-offset_bottom = 218.0
+offset_left = 529.0
+offset_top = 170.0
+offset_right = 729.0
+offset_bottom = 200.0
 theme_override_font_sizes/font_size = 16
 text = "Mr. Kiwi"
 
 [node name="MobHPLabel" type="Label" parent="CanvasLayer" unique_id=379572861]
-offset_left = 536.0
-offset_top = 219.0
-offset_right = 736.0
-offset_bottom = 249.0
+offset_left = 533.0
+offset_top = 203.0
+offset_right = 733.0
+offset_bottom = 233.0
 theme_override_font_sizes/font_size = 13
 text = "HP: 40/40"
+
+[node name="MobATKLabel" type="Label" parent="CanvasLayer" unique_id=1082746289]
+offset_left = 541.0
+offset_top = 234.0
+offset_right = 741.0
+offset_bottom = 254.0
+theme_override_font_sizes/font_size = 13
+text = "ATK: 8"
 
 [node name="DeckLabel" type="Label" parent="CanvasLayer" unique_id=299698568]
 offset_left = 58.0
@@ -89,10 +97,10 @@ theme_override_font_sizes/font_size = 13
 text = "GY: 0"
 
 [node name="EndTurnButton" type="Button" parent="CanvasLayer" unique_id=1792288462]
-offset_left = 957.0
-offset_top = 508.0
-offset_right = 1117.0
-offset_bottom = 544.0
+offset_left = 953.0
+offset_top = 523.0
+offset_right = 1113.0
+offset_bottom = 559.0
 theme_override_font_sizes/font_size = 14
 text = "End Turn"
 
@@ -139,10 +147,10 @@ position = Vector2(-203, 53)
 shape = SubResource("RectangleShape2D_s5ni7")
 
 [node name="SlotPanel1" type="Panel" parent="PlayerField_Node2D/CardSlot1_Area2D" unique_id=1743195508]
-offset_left = -65.0
-offset_top = -85.0
-offset_right = 65.0
-offset_bottom = 85.0
+offset_left = -71.0
+offset_top = -87.0
+offset_right = 59.0
+offset_bottom = 83.0
 metadata/_edit_use_anchors_ = true
 
 [node name="CardSlot2_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1393293509]

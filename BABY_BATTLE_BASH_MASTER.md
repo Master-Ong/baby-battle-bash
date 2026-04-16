@@ -293,8 +293,88 @@ Load the seed number in PixelLab to get consistent results across sessions.
 ## Progress Tracker
 
 ### MAJOR MILESTONE REACHED ✓
-**Full game flow working end to end — April 2026**
-Main Menu → Animal Select (stub) → Combat → Victory/Defeat all connected and working.
+**Full game flow with real card effects — April 2026**
+Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward persistence fixed. Color and Word v1 effects implemented.
+
+### Done ✓ (Complete list)
+- [x] Combat scene node structure built in Godot
+- [x] GameManager script — deck, energy, turn flow all working
+- [x] Card.gd — enum is ATTACK(0), SKILL(1), ANIMAL(2), COLOR(3), WORD(4)
+- [x] card.tscn and card_display.gd built
+- [x] Cards spawning visually in hand zone — all 5 visible
+- [x] HP, Energy, Mr. Kiwi name, HP, and ATK all showing on screen
+- [x] End Turn button working and positioned bottom right
+- [x] Card type routing — ATTACK/SKILL/ANIMAL/COLOR/WORD all handled
+- [x] play_attack_card — deals damage to mob, costs energy
+- [x] play_skill_card — gives player block, costs energy
+- [x] play_animal_card — drag to field slot, free, no energy cost
+- [x] play_color_or_word_card — Blue draws 1, Red buffs ATK, Green heals
+- [x] Run Away — draws 1 card instead of giving block
+- [x] field_slots Dictionary — tracks slot occupancy {0,1,2}
+- [x] resolve_combat() — full combat loop working
+- [x] win_combat() and lose_combat() — victory and defeat screens
+- [x] draw_cards with graveyard shuffle refill
+- [x] Opening hand guarantee — at least 2 starter animals on turn 1
+- [x] spawn_field_visuals() — world space, no duplication
+- [x] Card drag and drop — full working with snap back
+- [x] Input fix — MOUSE_FILTER_IGNORE, physics picking enabled
+- [x] Field animal input disabled after drop
+- [x] reward_screen.tscn — shows 1 Animal + 1 Color + 1 Word after victory
+- [x] Reward persistence — GameState.reward_cards carries cards between scenes
+- [x] lose_screen.tscn — Defeat overlay with working Retry button
+- [x] main_menu.tscn — title, Play, Exit
+- [x] animal_select.tscn — real 3-choice screen: Bunny/Turtle/Dog
+- [x] GameState autoload — selected_starter and reward_cards persist across scenes
+- [x] build_starting_deck() branches on GameState.selected_starter
+- [x] Turtle starter — HP 20, ATK 2, DEF 5
+- [x] Dog starter — HP 10, ATK 8, DEF 1
+- [x] MobATKLabel showing mob damage on screen
+- [x] project.godot starts at main menu
+- [x] Full scene flow: Main Menu → Animal Select → Combat → Victory/Defeat
+- [x] GitHub at github.com/Master-Ong/baby-battle-bash
+- [x] CLAUDE.md — CC reads rules automatically on startup
+- [x] ChatGPT constraints block saved in master doc
+- [x] prompt.txt workflow — paste long prompts via file
+
+### In Progress 🔄
+- [ ] Color/Word v1 effects — prompt ready, not yet confirmed working
+
+### Up Next 📋
+- [ ] Test and confirm Blue/Green/Run Away effects work correctly
+- [ ] Second mob encounter after Mr. Kiwi
+- [ ] Map/roadmap — node types: mob, elite, shop, rest, chest, boss
+- [ ] Turtle and Dog deeper card identity (unique verb packages)
+- [ ] Visual polish — card art, backgrounds, UI styling
+- [ ] Rarity system for reward pool
+- [ ] Adjective cards
+- [ ] Playtesting
+
+### Build Order (confirmed)
+1. Confirm v1 Color/Word effects ← current
+2. Second mob encounter
+3. Map/roadmap
+4. Visual polish
+5. Adjective cards and rarity
+
+### Current Scene Flow
+```
+Main Menu → Animal Select → Combat → Victory/Defeat
+                Bunny/Turtle/Dog        Reward screen (1 Animal + 1 Color + 1 Word)
+```
+
+### Known Remaining Issues 🔧
+- Blue/Green/Run Away effects not yet confirmed working
+- Reward pool limited to v1 set only
+- No second mob yet — same Mr. Kiwi every run
+- Visual polish not started
+
+### Workflow
+- ChatGPT — simplify, draft prompts, brainstorm
+- Claude.ai — verify files, architect, debug, teach, maintain docs
+- Claude Code — build only after Claude.ai approves
+- Long prompts via prompt.txt file
+- GitHub push at end of every session
+- Master doc updated at every save point
 
 ### Done ✓ (Complete list)
 - [x] Combat scene node structure built in Godot
