@@ -75,11 +75,22 @@ C:\Users\Nicky\Documents\baby-battle-bash\assets\sprites\
 res://
 ├── Scene/
 │   ├── combat_scene.tscn       ✓ Built
-│   └── card.tscn               ← Next to build
+│   ├── card.tscn               ✓ Built
+│   ├── reward_screen.tscn      ✓ Built
+│   ├── lose_screen.tscn        ✓ Built
+│   ├── main_menu.tscn          ✓ Built
+│   └── animal_select.tscn      ✓ Built (real 3-choice screen)
 ├── Scripts/
 │   ├── Card.gd                 ✓ Built (card data blueprint)
 │   ├── gamer_manager_node.gd   ✓ Built (game brain)
-│   └── card_display.gd         ← Next to build
+│   ├── card_display.gd         ✓ Built (card visual and interaction)
+│   ├── reward_screen.gd        ✓ Built
+│   ├── lose_screen.gd          ✓ Built
+│   ├── main_menu.gd            ✓ Built
+│   ├── animal_select.gd        ✓ Built
+│   └── GameState.gd            ✓ Built (autoload singleton)
+├── CLAUDE.md                   ✓ Created (CC reads on startup)
+├── BABY_BATTLE_BASH_MASTER.md  ✓ Master reference doc
 └── assets/
     └── sprites/                ← Save all art here
 ```
@@ -294,7 +305,7 @@ Load the seed number in PixelLab to get consistent results across sessions.
 
 ### MAJOR MILESTONE REACHED ✓
 **Full game flow with real card effects — April 2026**
-Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward persistence fixed. Color and Word v1 effects implemented.
+Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward persistence fixed. Color and Word v1 effects implemented. Junior engineer CC behavior added.
 
 ### Done ✓ (Complete list)
 - [x] Combat scene node structure built in Godot
@@ -308,20 +319,31 @@ Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward pe
 - [x] play_attack_card — deals damage to mob, costs energy
 - [x] play_skill_card — gives player block, costs energy
 - [x] play_animal_card — drag to field slot, free, no energy cost
-- [x] play_color_or_word_card — Blue draws 1, Red buffs ATK, Green heals
+- [x] Blue card — draws 1 card when played
+- [x] Red card — buffs all field animals +2 ATK
+- [x] Green card — heals player 3 HP
 - [x] Run Away — draws 1 card instead of giving block
-- [x] field_slots Dictionary — tracks slot occupancy {0,1,2}
+- [x] Scratch, Bite, Dash — ATTACK cards dealing correct damage
+- [x] Hide, Block — SKILL cards giving correct block
+- [x] Order of operations fix — card removed from hand before draw_cards(1) fires
+- [x] field_slots Dictionary — tracks slot occupancy {0: left, 1: center, 2: right}
+- [x] field_animals array removed — field_slots is now source of truth
+- [x] get_field_animals() helper function exists
 - [x] resolve_combat() — full combat loop working
 - [x] win_combat() and lose_combat() — victory and defeat screens
 - [x] draw_cards with graveyard shuffle refill
 - [x] Opening hand guarantee — at least 2 starter animals on turn 1
-- [x] spawn_field_visuals() — world space, no duplication
+- [x] spawn_field_visuals() — uses field_slots as source of truth, slot key maps to position
+- [x] Field visual duplication fix — free() used for immediate cleanup
+- [x] Field slot position fix — slot 0=left, 1=center, 2=right preserved after End Turn
 - [x] Card drag and drop — full working with snap back
 - [x] Input fix — MOUSE_FILTER_IGNORE, physics picking enabled
-- [x] Field animal input disabled after drop
+- [x] Field animal input disabled after drop — set_process(false) + input_pickable = false
 - [x] reward_screen.tscn — shows 1 Animal + 1 Color + 1 Word after victory
+- [x] Reward pool v1 — Bunny/Turtle/Dog, Blue/Red/Green, Scratch/Hide/Run Away/Bite/Block/Dash
 - [x] Reward persistence — GameState.reward_cards carries cards between scenes
-- [x] lose_screen.tscn — Defeat overlay with working Retry button
+- [x] lose_screen.tscn — Defeat overlay with working Retry button, PROCESS_MODE_WHEN_PAUSED
+- [x] Retry fix — queue_free() before scene reload
 - [x] main_menu.tscn — title, Play, Exit
 - [x] animal_select.tscn — real 3-choice screen: Bunny/Turtle/Dog
 - [x] GameState autoload — selected_starter and reward_cards persist across scenes
@@ -330,36 +352,29 @@ Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward pe
 - [x] Dog starter — HP 10, ATK 8, DEF 1
 - [x] MobATKLabel showing mob damage on screen
 - [x] project.godot starts at main menu
-- [x] Full scene flow: Main Menu → Animal Select → Combat → Victory/Defeat
+- [x] Full scene flow connected end to end
 - [x] GitHub at github.com/Master-Ong/baby-battle-bash
-- [x] CLAUDE.md — CC reads rules automatically on startup
-- [x] ChatGPT constraints block saved in master doc
-- [x] prompt.txt workflow — paste long prompts via file
+- [x] CLAUDE.md recreated with junior engineer behavior rules
+- [x] ChatGPT constraints block in master doc
+- [x] prompt.txt workflow for long prompts
+- [x] Junior engineer role prompt added to CC workflow
 
 ### In Progress 🔄
-- [ ] Field visual bugs being fixed — prompt sent to CC
-- [ ] Run Away draw behavior needs separate testing confirmation
-
-### Recently Completed This Session ✓
-- [x] Blue card — draws 1 card when played
-- [x] Green card — heals player 3 HP when played
-- [x] Red card — buffs field animals +2 ATK (visual refresh fix in progress)
-- [x] Run Away — draws 1 card instead of giving block
-- [x] Order of operations fix — card removed from hand before draw_cards(1) fires
-- [x] Field slot position fix — slot 0=left, 1=center, 2=right preserved after End Turn
+- [ ] Field visual position after End Turn — fix sent to CC, needs testing
+- [ ] Run Away draw behavior — needs confirmed testing
 
 ### Up Next 📋
-- [ ] Test and confirm Blue/Green/Run Away effects work correctly
+- [ ] Confirm all v1 Color/Word effects working correctly
 - [ ] Second mob encounter after Mr. Kiwi
 - [ ] Map/roadmap — node types: mob, elite, shop, rest, chest, boss
-- [ ] Turtle and Dog deeper card identity (unique verb packages)
+- [ ] Turtle and Dog unique verb packages
 - [ ] Visual polish — card art, backgrounds, UI styling
 - [ ] Rarity system for reward pool
 - [ ] Adjective cards
 - [ ] Playtesting
 
 ### Build Order (confirmed)
-1. Confirm v1 Color/Word effects ← current
+1. Confirm v1 effects and field visual fix ← current
 2. Second mob encounter
 3. Map/roadmap
 4. Visual polish
@@ -368,55 +383,24 @@ Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward pe
 ### Current Scene Flow
 ```
 Main Menu → Animal Select → Combat → Victory/Defeat
-                Bunny/Turtle/Dog        Reward screen (1 Animal + 1 Color + 1 Word)
+            Bunny/Turtle/Dog    Reward: 1 Animal + 1 Color + 1 Word
+                                Cards persist via GameState.reward_cards
 ```
 
 ### Known Remaining Issues 🔧
-- Blue/Green/Run Away effects not yet confirmed working
-- Reward pool limited to v1 set only
-- No second mob yet — same Mr. Kiwi every run
+- Field visual position after End Turn not yet confirmed fixed
+- Run Away draw not yet confirmed tested
+- No second mob — same Mr. Kiwi every run
 - Visual polish not started
+- CLAUDE.md had file extension issue — fixed by renaming from .md.txt to .md
 
 ### Workflow
 - ChatGPT — simplify, draft prompts, brainstorm
 - Claude.ai — verify files, architect, debug, teach, maintain docs
-- Claude Code — build only after Claude.ai approves
+- Claude Code — build only after Claude.ai approves, behaves as junior engineer
 - Long prompts via prompt.txt file
 - GitHub push at end of every session
 - Master doc updated at every save point
-
-### Done ✓ (Complete list)
-- [x] Combat scene node structure built in Godot
-- [x] GameManager script — deck, energy, turn flow all working
-- [x] Card.gd — enum is ATTACK(0), SKILL(1), ANIMAL(2), COLOR(3), WORD(4)
-- [x] card.tscn and card_display.gd built
-- [x] Cards spawning visually in hand zone — all 5 visible
-- [x] HP, Energy, Mr. Kiwi name and HP all showing on screen
-- [x] End Turn button working and positioned bottom right
-- [x] Card type routing — ATTACK/SKILL/ANIMAL/COLOR all handled
-- [x] play_attack_card — deals 6 damage to mob, costs 1 energy
-- [x] play_skill_card — gives player 5 block, costs 1 energy
-- [x] play_animal_card — drag to field slot, free, no energy cost
-- [x] field_slots Dictionary — tracks slot occupancy {0: left, 1: center, 2: right}
-- [x] resolve_combat() — animals attack mob, mob deals 10 dmg, player takes damage if field empty
-- [x] win_combat() — fires victory screen when mob HP hits 0
-- [x] lose_combat() — fires lose screen when player HP hits 0
-- [x] draw_cards with graveyard shuffle refill
-- [x] Opening hand guarantee — at least 2 Bunny cards on turn 1
-- [x] Bunny animal cards in starting deck (3 Bunnies, ATK 4, HP 12)
-- [x] spawn_field_visuals() — world space, no duplication, preserves slot panels
-- [x] Card drag and drop — grabs from center, drops centered in slot, snaps back if invalid
-- [x] Input fix — MOUSE_FILTER_IGNORE on Control children, physics picking enabled
-- [x] Field animal input disabled after drop — set_process(false) + input_pickable = false
-- [x] Debug print spam removed
-- [x] Card enum mismatch fixed — setup() uses enum names
-- [x] Field duplication bug fixed, slot panels preserved
-- [x] mob_damage = 10, double turn increment fixed
-- [x] reward_screen.tscn and reward_screen.gd — shows 3 card options after victory
-- [x] lose_screen.tscn and lose_screen.gd — Defeat overlay with Retry button
-- [x] Retry fix — queue_free() before scene reload, process_mode WHEN_PAUSED
-- [x] main_menu.tscn and main_menu.gd — title, Play, Exit buttons
-- [x] animal_select.tscn and animal_select.gd — stub scene with Start button
 - [x] project.godot — game starts at main menu
 - [x] Full scene flow connected end to end
 - [x] GitHub repository at github.com/Master-Ong/baby-battle-bash

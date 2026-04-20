@@ -1,49 +1,186 @@
-In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
+Create a file called CLAUDE.md in C:\Users\Nicky\Documents\baby-battle-bash with exactly this content:
 
-Read CLAUDE.md and res://Scripts/gamer_manager_node.gd first.
+# CLAUDE.md — Baby Battle Bash Project Rules
+# Claude Code reads this file automatically at startup.
+# Last updated: April 2026
 
-Fix two bugs in field visual display. Smallest safe patch only.
+---
 
-Bug 1 — Red buff does not update field card visuals:
-In play_color_or_word_card(), after the Red-style ATK buff branch, refresh the field visuals so the displayed ATK on field cards updates immediately.
+## Project Identity
 
-Bug 2 — Field animals shift position after End Turn:
-In spawn_field_visuals(), the current loop is likely rebuilding positions from sequential order instead of preserving exact slot placement.
-Fix it so slot 0 always maps to left, slot 1 to center, slot 2 to right using field_slots as the source of truth.
+- Game: Baby Battle Bash
+- Engine: Godot 4 (version 4.6.2 stable)
+- Genre: 2D Card Deckbuilding Roguelike
+- Project path: C:\Users\Nicky\Documents\baby-battle-bash
+- Developer: Nicky (creative director) + Friend (technical lead)
+- Workflow: Claude.ai plans → Claude Code builds
 
-Implementation details:
-- Use the real current field data structure already present in gamer_manager_node.gd
-- If get_field_animals() already exists, use it
-- If not, use field_slots / field_animals directly instead of inventing a new helper
-- Preserve the same visual centering/alignment the cards already use in the working combat scene
-- Do not introduce a new offset mistake while fixing slot order
+---
 
-Target spawn_field_visuals() pattern:
-func spawn_field_visuals():
-    for visual in field_visuals:
-        visual.queue_free()
-    field_visuals.clear()
+## First Thing Every Session
 
-    var field_node = get_tree().root.get_node("CombatScene/PlayerField_Node2D")
-    var slot_positions = {
-        0: Vector2(-200, 0),
-        1: Vector2(0, 0),
-        2: Vector2(200, 0),
-    }
+Use godot-mcp to read the current scene tree before making any changes.
+Never assume node names — always verify them first.
+Never assume file contents — always read the file before editing it.
 
-    for slot_key in field_slots:
-        if field_slots[slot_key] != null:
-            var card_node = CardScene.instantiate()
-            field_node.add_child(card_node)
-            card_node.setup(field_slots[slot_key])
-            card_node.position = slot_positions[slot_key]
-            field_visuals.append(card_node)
+---
 
-Important:
-- Do not touch reward, lose, menu, animal select, GameState, or card drag logic
-- Keep the patch minimal
+## Coordinate System Rules
 
-After the patch:
-1. List every file changed
-2. Give a short test plan
-3. Confirm whether Run Away draw behavior still needs separate testing
+### CanvasLayer (screen space)
+- Origin is TOP-LEFT corner of screen (0, 0)
+- Used for: HP label, Energy label, Mob name/HP labels, Deck label, Graveyard label, End Turn button
+- Positions use offset_left and offset_top
+
+### Node2D (world space)
+- Origin is CENTER of screen (0, 0)
+- Left edge X=-576, Right edge X=576, Top Y=-324, Bottom Y=324
+- Used for: HandZone_Area2D, PlayerField_Node2D, CardSlots, MobContainerNode2D, DG_Node2D, all panels
+
+### During drag and drop
+- Always use get_global_mouse_position()
+- Always use global_position when moving a dragged card
+- For slot detection use Rect2.has_point() on SlotPanel.get_global_rect()
+- Use _input_event for press detection, _unhandled_input for release detection
+
+---
+
+## Card Type Rules
+
+| Type | On Click/Drop | Energy Cost | Destination |
+|------|--------------|-------------|-------------|
+| ANIMAL | Drag to field slot | 0 — FREE | Stays on field until defeated |
+| ATTACK | Single click | 1 | Deals damage to mob, goes to graveyard |
+| SKILL | Single click | 1 | Gives player defense, goes to graveyard |
+| COLOR | Single click | 1 | Special effect, goes to graveyard |
+| WORD | Single click | 1 | Special effect, goes to graveyard |
+
+## Color Card Effects (v1)
+- Blue: Draw 1 card
+- Red: Buff all field animals +2 ATK
+- Green: Heal player 3 HP
+
+## Word Card Effects (v1)
+- Scratch: Deal 6 damage (ATTACK)
+- Hide: Gain 5 Block (SKILL)
+- Run Away: Draw 1 card (SKILL)
+- Bite: Deal 8 damage (ATTACK)
+- Block: Gain 8 Block (SKILL)
+- Dash: Deal 4 damage (ATTACK)
+
+---
+
+## Combat Flow Rules
+
+Turn order every End Turn:
+1. Each field animal attacks mob
+2. Mob attacks each field animal — mob_damage = 10
+3. Dead animals removed from field_slots, sent to graveyard
+4. If field is empty after mob attacks — take_player_damage(mob_damage)
+5. spawn_field_visuals() to refresh display
+6. discard_hand() — all hand cards go to graveyard
+7. draw_cards(5) — draw new hand
+
+Energy resets to max_energy at start of each turn.
+Defense resets to 0 at start of enemy turn.
+
+---
+
+## Field Slot Rules
+
+- field_slots is a Dictionary {0: null, 1: null, 2: null}
+- Slot 0 = left (CardSlot1_Area2D)
+- Slot 1 = center (CardSlot2_Area2D)
+- Slot 2 = right (CardSlot3_Area2D)
+- Never use field_animals array — it no longer exists
+- Always use get_field_animals() helper or loop field_slots directly
+
+---
+
+## Starting Deck Composition
+
+- 10 Strike cards (ATTACK, cost 1, deal 6 damage)
+- 4 Defend cards (SKILL, cost 1, gain 5 block)
+- 3 starter animals (ANIMAL, cost 0) based on GameState.selected_starter
+- Bunny: ATK 4, HP 12, DEF 2
+- Turtle: ATK 2, HP 20, DEF 5
+- Dog: ATK 8, HP 10, DEF 1
+
+---
+
+## GameState Autoload
+
+- GameState.selected_starter — "Bunny", "Turtle", or "Dog"
+- GameState.reward_cards — Array of cards earned during the run
+- Never clear reward_cards — they persist for the entire run
+
+---
+
+## Scene Flow
+
+Main Menu → Animal Select → Combat → Victory/Defeat
+
+## Key Variables in gamer_manager_node.gd
+
+- player_hp = 50, player_defense = 0
+- max_energy = 3, current_energy = 3
+- field_slots Dictionary {0,1,2}
+- max_field_slots = 3
+- mob_hp = 40, mob_damage = 10, mob_name = "Mr. Kiwi"
+
+---
+
+## Critical Rules — Never Break These
+
+1. CombatScene root Node2D position must always be Vector2(0,0)
+2. Cards use Area2D not CharacterBody2D
+3. MobContainerNode2D is the ONLY node swapped between encounters
+4. Use create_tween() for all animations — never the old Tween node
+5. Hand cap is 10 cards maximum
+6. Graveyard shuffles back into deck when deck runs empty
+7. No shirk in game lore — no false gods, idol worship, or polytheistic themes
+8. field_animals array does not exist — use field_slots Dictionary
+9. queue_free() for hand visuals, free() for field visuals during spawn_field_visuals()
+10. Always erase card from hand before calling draw_cards() to avoid duplicates
+
+---
+
+## Tween Syntax (Godot 4)
+
+var tween = create_tween()
+tween.tween_property(node, "global_position", target_position, duration)
+
+---
+
+## File Locations
+
+- res://Scripts/Card.gd — card data blueprint
+- res://Scripts/gamer_manager_node.gd — game brain
+- res://Scripts/card_display.gd — card visual and interaction
+- res://Scripts/GameState.gd — autoload singleton
+- res://Scene/combat_scene.tscn — main combat scene
+- res://Scene/card.tscn — single card visual scene
+- res://Scene/reward_screen.tscn — victory reward screen
+- res://Scene/lose_screen.tscn — defeat screen
+- res://Scene/main_menu.tscn — main menu
+- res://Scene/animal_select.tscn — starter selection
+
+---
+
+## Junior Engineer Behavior Rules
+
+You are acting as a junior engineer on this project:
+- Read before acting — always read CLAUDE.md and relevant files first
+- Restate the task in one sentence before implementing
+- List files you plan to change and why
+- Make the smallest safe change only
+- Do not refactor unrelated systems
+- Explain in plain English what is wrong before touching any file
+- Propose the smallest possible fix first
+
+---
+
+## End of Session Reminder
+
+Before closing Claude Code always save progress to memory:
+Summarize today's progress, current issues, and what to tackle next session. Save to project memory.

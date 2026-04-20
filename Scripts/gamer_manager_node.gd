@@ -406,19 +406,30 @@ func spawn_field_visuals():
 		visual.queue_free()
 	field_visuals.clear()
 
-	var field_node = get_tree().root.get_node("CombatScene/PlayerField_Node2D")
-	var slot_positions = {
-		0: Vector2(-200, 0),
-		1: Vector2(0, 0),
-		2: Vector2(200, 0),
+	# Clear any card visuals that were reparented into CardSlot nodes during drag-drop.
+	# Permanent slot children (CollisionShape2D, Panel) are preserved; only dynamic card nodes are freed.
+	var root = get_tree().root.get_node("CombatScene")
+	for slot_node in [
+		root.get_node("PlayerField_Node2D/CardSlot1_Area2D"),
+		root.get_node("PlayerField_Node2D/CardSlot2_Area2D"),
+		root.get_node("PlayerField_Node2D/CardSlot3_Area2D"),
+	]:
+		for child in slot_node.get_children():
+			if not (child is CollisionShape2D or child is Panel):
+				child.queue_free()
+
+	var slot_nodes = {
+		0: root.get_node("PlayerField_Node2D/CardSlot1_Area2D"),
+		1: root.get_node("PlayerField_Node2D/CardSlot2_Area2D"),
+		2: root.get_node("PlayerField_Node2D/CardSlot3_Area2D"),
 	}
 
 	for slot_key in field_slots:
 		if field_slots[slot_key] != null:
 			var card_node = CardScene.instantiate()
-			field_node.add_child(card_node)
+			slot_nodes[slot_key].add_child(card_node)
 			card_node.setup(field_slots[slot_key])
-			card_node.position = slot_positions[slot_key]
+			card_node.position = Vector2(-60, -80)
 			field_visuals.append(card_node)
 
 
