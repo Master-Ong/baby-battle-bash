@@ -304,8 +304,117 @@ Load the seed number in PixelLab to get consistent results across sessions.
 ## Progress Tracker
 
 ### MAJOR MILESTONE REACHED ✓
-**Full game flow with real card effects — April 2026**
-Main Menu → Animal Select → Combat → Victory/Defeat all working. Reward persistence fixed. Color and Word v1 effects implemented. Junior engineer CC behavior added.
+**Full roguelike loop with roadmap, relics, and multiple encounters — April/May 2026**
+Main Menu → Animal Select → Roadmap → Combat → Reward → Roadmap progression working end to end.
+
+### Done ✓ (Complete list)
+- [x] Combat scene node structure built in Godot
+- [x] GameManager script — deck, energy, turn flow all working
+- [x] Card.gd — enum is ATTACK(0), SKILL(1), ANIMAL(2), COLOR(3), WORD(4)
+- [x] card.tscn and card_display.gd built
+- [x] Cards spawning visually in hand zone — all 5 visible
+- [x] HP, Energy, Mr. Kiwi name, HP, and ATK all showing on screen
+- [x] End Turn button working and positioned bottom right
+- [x] Card type routing — ATTACK/SKILL/ANIMAL/COLOR/WORD all handled
+- [x] play_attack_card — deals damage to mob, costs energy
+- [x] play_skill_card — gives player block, costs energy
+- [x] play_animal_card — drag to field slot, free, no energy cost
+- [x] Blue card — draws 1 card when played
+- [x] Red card — buffs all field animals +2 ATK, visual refreshes immediately
+- [x] Green card — heals player 3 HP
+- [x] Run Away — draws 1 card instead of giving block
+- [x] Scratch, Bite, Dash — ATTACK cards dealing correct damage
+- [x] Hide, Block — SKILL cards giving correct block
+- [x] field_slots Dictionary — tracks slot occupancy {0: left, 1: center, 2: right}
+- [x] field_animals array removed — field_slots is source of truth
+- [x] get_field_animals() helper function exists
+- [x] resolve_combat() — full combat loop working
+- [x] win_combat() and lose_combat() — victory and defeat screens
+- [x] draw_cards with graveyard shuffle refill
+- [x] Opening hand guarantee — at least 2 starter animals on turn 1
+- [x] spawn_field_visuals() — uses field_slots as source of truth
+- [x] Field slots clear between encounters
+- [x] Card drag and drop — full working with snap back
+- [x] Input fix — MOUSE_FILTER_IGNORE on Control children, physics picking enabled
+- [x] Field animal input disabled after drop
+- [x] reward_screen.tscn — shows 1 Animal + 1 Color + 1 Word after victory
+- [x] Reward pool v1 — Bunny/Turtle/Dog, Blue/Red/Green, Scratch/Hide/Run Away/Bite/Block/Dash
+- [x] Reward persistence — GameState.reward_cards carries cards between scenes
+- [x] lose_screen.tscn — Defeat overlay with working Retry button
+- [x] main_menu.tscn — title, Play, Exit
+- [x] animal_select.tscn — real 3-choice screen: Bunny/Turtle/Dog
+- [x] GameState autoload — selected_starter, reward_cards, relics, player_hp, encounter_number, nodes_completed
+- [x] build_starting_deck() branches on GameState.selected_starter
+- [x] Turtle starter — HP 20, ATK 2, DEF 5
+- [x] Dog starter — HP 10, ATK 8, DEF 1
+- [x] MobATKLabel showing mob damage on screen
+- [x] RelicLabel showing owned relics on combat HUD
+- [x] Block showing on HP label when active
+- [x] player_hp persists via GameState between scenes
+- [x] Encounter progression — Mr. Kiwi (encounter 1) → Big Bear (encounter 2, HP 65, DMG 14)
+- [x] roadmap_scene.tscn — diamond layout, bottom to top progression
+- [x] Roadmap node types — Combat, Rest, Chest, Boss
+- [x] Temporary test route — Combat → Chest → Combat → Rest → Boss
+- [x] rest_site.tscn — heals 15 HP, marks node completed, returns to roadmap
+- [x] chest_site.tscn — gives Bandage Roll relic, marks node completed
+- [x] Bandage Roll relic — starts each combat with 5 Block on turn 1
+- [x] Visual polish — card colors by type, dark background, mob zone tinted red
+- [x] Roadmap node colors — Combat red, Rest green, Chest gold, Boss purple
+- [x] BackgroundRect mouse_filter set to IGNORE so cards still work
+- [x] project.godot starts at main menu
+- [x] GitHub at github.com/Master-Ong/baby-battle-bash
+- [x] CLAUDE.md — CC reads rules automatically on startup
+- [x] Junior engineer behavior in CLAUDE.md
+- [x] prompt.txt workflow for long prompts
+- [x] Obsidian second brain set up with all templates
+
+### In Progress 🔄
+- [ ] HUD restructure — safe version prompt ready, not yet sent
+- [ ] Visual polish — card art placeholders not yet added
+
+### Up Next 📋
+- [ ] Decide whether to send safe HUD restructure prompt
+- [ ] Add card art sprites for animals
+- [ ] More mob encounters beyond Big Bear
+- [ ] Balance pass on mob HP and damage values
+- [ ] Adjective cards
+- [ ] More relics
+- [ ] Map/roadmap procedural generation
+- [ ] Playtesting
+
+### Build Order (confirmed)
+1. HUD restructure decision ← current
+2. Card art sprites
+3. More mob encounters
+4. Balance pass
+5. Adjective cards and more relics
+
+### Current Scene Flow
+```
+Main Menu → Animal Select → Roadmap → Combat → Victory → Reward → Roadmap
+                                              ↓ Defeat → Lose Screen → Retry
+                                    Rest Site (heal 15 HP)
+                                    Chest Site (Bandage Roll relic)
+```
+
+### Known Remaining Issues 🔧
+- HUD restructure risky — breaks card input if MOUSE_FILTER_IGNORE not set on all containers
+- No card art yet — all placeholder grey panels
+- Roadmap is temporary test layout — needs rebalancing before release
+- No procedural map generation yet
+
+### WARNING — Do Not Do These Without Claude Review
+- HUD restructure without MOUSE_FILTER_IGNORE on every container
+- Any full screen Control node without MOUSE_FILTER_IGNORE
+- Adding BackgroundRect without mouse_filter = IGNORE
+
+### Workflow
+- ChatGPT — simplify, draft prompts, brainstorm
+- Claude.ai — verify files, architect, debug, teach, maintain docs
+- Claude Code — build only after Claude.ai approves
+- Long prompts via prompt.txt file
+- GitHub push at end of every session
+- Master doc and Obsidian updated at every save point
 
 ### Done ✓ (Complete list)
 - [x] Combat scene node structure built in Godot

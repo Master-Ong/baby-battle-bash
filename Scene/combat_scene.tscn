@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dmvvs0lr6dmy7" path="res://Scripts/gamer_manager_node.gd" id="1_nbkot"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mob"]
+bg_color = Color(0.3, 0.1, 0.1, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nbkot"]
 size = Vector2(576, 123)
 
@@ -14,6 +17,14 @@ size = Vector2(78.25, 76.5)
 [node name="CombatScene" type="Node2D" unique_id=1615110680]
 position = Vector2(-1, 34)
 
+[node name="BackgroundRect" type="ColorRect" parent="." unique_id=1691168631]
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+mouse_filter = 2
+color = Color(0.098, 0.078, 0.137, 1)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=810811121]
 
 [node name="MobZonePanel" type="Panel" parent="." unique_id=2970752]
@@ -21,12 +32,13 @@ offset_left = -127.0
 offset_top = -240.0
 offset_right = 119.0
 offset_bottom = -70.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_mob")
 
 [node name="FieldZonePanel" type="Panel" parent="." unique_id=1586173171]
-offset_left = -371.0
-offset_top = -33.0
-offset_right = 381.0
-offset_bottom = 147.0
+offset_left = -369.0
+offset_top = -28.0
+offset_right = 383.0
+offset_bottom = 152.0
 metadata/_edit_use_anchors_ = true
 
 [node name="HandZone_Area2D" type="Area2D" parent="." unique_id=904082719]
@@ -38,69 +50,144 @@ shape = SubResource("RectangleShape2D_nbkot")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=124383908]
 
-[node name="PlayerHPLabel" type="Label" parent="CanvasLayer" unique_id=1372277561]
-offset_left = 13.0
-offset_top = 10.0
-offset_right = 213.0
-offset_bottom = 40.0
+[node name="HUDRoot" type="Control" parent="CanvasLayer" unique_id=18499935]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerHUD" type="Control" parent="CanvasLayer/HUDRoot" unique_id=1175509312]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 160.0
+mouse_filter = 2
+
+[node name="PlayerStatsVBox" type="VBoxContainer" parent="CanvasLayer/HUDRoot/PlayerHUD" unique_id=223344556]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 280.0
+offset_bottom = 140.0
+mouse_filter = 2
+
+[node name="PlayerHPLabel" type="Label" parent="CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox" unique_id=1372277561]
+layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "HP: 50"
-metadata/_edit_use_anchors_ = true
 
-[node name="EnergyLabel" type="Label" parent="CanvasLayer" unique_id=494232948]
-offset_left = 73.0
-offset_top = 9.0
-offset_right = 273.0
-offset_bottom = 39.0
+[node name="EnergyLabel" type="Label" parent="CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox" unique_id=494232948]
+layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "3/3 Energy"
-metadata/_edit_use_anchors_ = true
 
-[node name="MobNameLabel" type="Label" parent="CanvasLayer" unique_id=351438004]
-offset_left = 529.0
-offset_top = 170.0
-offset_right = 729.0
-offset_bottom = 200.0
+[node name="BlockLabel" type="Label" parent="CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox" unique_id=397786251]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Block: 0"
+
+[node name="RelicLabel" type="Label" parent="CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox" unique_id=1669454926]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Relics: None"
+
+[node name="MobHUD" type="Control" parent="CanvasLayer/HUDRoot" unique_id=2006549370]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -240.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 120.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="MobStatsVBox" type="VBoxContainer" parent="CanvasLayer/HUDRoot/MobHUD" unique_id=334455667]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 100.0
+mouse_filter = 2
+
+[node name="MobNameLabel" type="Label" parent="CanvasLayer/HUDRoot/MobHUD/MobStatsVBox" unique_id=351438004]
+layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Mr. Kiwi"
+horizontal_alignment = 1
 
-[node name="MobHPLabel" type="Label" parent="CanvasLayer" unique_id=379572861]
-offset_left = 533.0
-offset_top = 203.0
-offset_right = 733.0
-offset_bottom = 233.0
+[node name="MobHPLabel" type="Label" parent="CanvasLayer/HUDRoot/MobHUD/MobStatsVBox" unique_id=379572861]
+layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "HP: 40/40"
+horizontal_alignment = 1
 
-[node name="MobATKLabel" type="Label" parent="CanvasLayer" unique_id=1082746289]
-offset_left = 541.0
-offset_top = 234.0
-offset_right = 741.0
-offset_bottom = 254.0
+[node name="MobATKLabel" type="Label" parent="CanvasLayer/HUDRoot/MobHUD/MobStatsVBox" unique_id=1082746289]
+layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "ATK: 8"
+horizontal_alignment = 1
 
-[node name="DeckLabel" type="Label" parent="CanvasLayer" unique_id=299698568]
-offset_left = 79.0
-offset_top = 583.0
-offset_right = 199.0
-offset_bottom = 607.0
+[node name="BottomLeftHUD" type="Control" parent="CanvasLayer/HUDRoot" unique_id=445566778]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -80.0
+offset_right = 300.0
+offset_bottom = 0.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="DeckLabel" type="Label" parent="CanvasLayer/HUDRoot/BottomLeftHUD" unique_id=299698568]
+layout_mode = 1
+offset_left = 73.0
+offset_top = 17.0
+offset_right = 253.0
+offset_bottom = 39.0
 theme_override_font_sizes/font_size = 13
 text = "Deck: 14"
 
-[node name="GraveyardLabel" type="Label" parent="CanvasLayer" unique_id=679966139]
-offset_left = 1022.0
-offset_top = 591.0
-offset_right = 1142.0
-offset_bottom = 615.0
+[node name="BottomRightHUD" type="Control" parent="CanvasLayer/HUDRoot" unique_id=556677889]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -215.0
+offset_top = -160.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="GraveyardLabel" type="Label" parent="CanvasLayer/HUDRoot/BottomRightHUD" unique_id=679966139]
+layout_mode = 1
+offset_left = 75.0
+offset_top = 97.0
+offset_right = 215.0
+offset_bottom = 119.0
 theme_override_font_sizes/font_size = 13
 text = "GY: 0"
 
-[node name="EndTurnButton" type="Button" parent="CanvasLayer" unique_id=1792288462]
-offset_left = 957.0
-offset_top = 511.0
-offset_right = 1117.0
-offset_bottom = 547.0
+[node name="EndTurnButton" type="Button" parent="CanvasLayer/HUDRoot/BottomRightHUD" unique_id=1792288462]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 17.0
+offset_right = 180.0
+offset_bottom = 53.0
 theme_override_font_sizes/font_size = 14
 text = "End Turn"
 
@@ -163,10 +250,10 @@ position = Vector2(0, 53)
 shape = SubResource("RectangleShape2D_s5ni7")
 
 [node name="SlotPanel2" type="Panel" parent="PlayerField_Node2D/CardSlot2_Area2D" unique_id=805417087]
-offset_left = -67.0
-offset_top = -84.0
-offset_right = 63.0
-offset_bottom = 86.0
+offset_left = -50.0
+offset_top = -81.0
+offset_right = 80.0
+offset_bottom = 89.0
 metadata/_edit_use_anchors_ = true
 
 [node name="CardSlot3_Area2D" type="Area2D" parent="PlayerField_Node2D" unique_id=1109166814]
@@ -176,10 +263,10 @@ position = Vector2(205, 55)
 shape = SubResource("RectangleShape2D_s5ni7")
 
 [node name="SlotPanel3" type="Panel" parent="PlayerField_Node2D/CardSlot3_Area2D" unique_id=788641041]
-offset_left = -48.0
-offset_top = -111.0
-offset_right = 82.0
-offset_bottom = 59.0
+offset_left = -56.0
+offset_top = -83.0
+offset_right = 74.0
+offset_bottom = 87.0
 metadata/_edit_use_anchors_ = true
 
 [node name="MobContainerNode2D" type="Node2D" parent="." unique_id=2051815598]
@@ -188,4 +275,4 @@ position = Vector2(1, -160)
 [node name="GamerManager_Node" type="Node" parent="." unique_id=1532285235]
 script = ExtResource("1_nbkot")
 
-[connection signal="pressed" from="CanvasLayer/EndTurnButton" to="GamerManager_Node" method="end_turn"]
+[connection signal="pressed" from="CanvasLayer/HUDRoot/BottomRightHUD/EndTurnButton" to="GamerManager_Node" method="end_turn"]

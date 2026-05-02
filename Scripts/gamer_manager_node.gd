@@ -52,10 +52,10 @@ var field_visuals: Array = []
 # =====================================================================
 # SECTION 5 — MOB STATE
 # =====================================================================
-var mob_hp: int        = 40
-var mob_max_hp: int    = 40
-var mob_name: String   = "Mr. Kiwi"
-var mob_damage: int    = 10
+var mob_hp: int        = 0
+var mob_max_hp: int    = 0
+var mob_name: String   = ""
+var mob_damage: int    = 0
 
 
 # =====================================================================
@@ -96,10 +96,40 @@ func is_slot_empty(slot_index: int) -> bool:
 
 
 # =====================================================================
+# SECTION 7c — MOB DATA LOADER
+# =====================================================================
+func load_mob_data():
+	match GameState.encounter_number:
+		1:
+			mob_name   = "Mr. Kiwi"
+			mob_hp     = 40
+			mob_max_hp = 40
+			mob_damage = 10
+		2:
+			mob_name   = "Big Bear"
+			mob_hp     = 65
+			mob_max_hp = 65
+			mob_damage = 14
+		_:
+			mob_name   = "Big Bear"
+			mob_hp     = 65
+			mob_max_hp = 65
+			mob_damage = 14
+
+
+# =====================================================================
 # SECTION 8 — _ready()
 # =====================================================================
 func _ready():
+	if GameState.player_hp > 0:
+		player_hp = GameState.player_hp
+	else:
+		player_hp = 50
+		GameState.player_hp = 50
 	_set_positions()
+	load_mob_data()
+	field_slots = {0: null, 1: null, 2: null}
+	spawn_field_visuals()
 	build_starting_deck()
 
 	randomize()
@@ -139,15 +169,24 @@ func _set_positions():
 # SECTION 10 — HUD (Heads-Up Display)
 # =====================================================================
 func update_hud():
+	GameState.player_hp = player_hp
 	var root = get_tree().root.get_node("CombatScene")
 
-	root.get_node("CanvasLayer/PlayerHPLabel").text  = "HP: " + str(player_hp)
-	root.get_node("CanvasLayer/EnergyLabel").text    = str(current_energy) + "/" + str(max_energy) + " Energy"
-	root.get_node("CanvasLayer/MobNameLabel").text   = mob_name
-	root.get_node("CanvasLayer/MobHPLabel").text     = "HP: " + str(mob_hp) + "/" + str(mob_max_hp)
-	root.get_node("CanvasLayer/MobATKLabel").text    = "ATK: " + str(mob_damage)
-	root.get_node("CanvasLayer/DeckLabel").text      = "Deck: " + str(deck.size())
-	root.get_node("CanvasLayer/GraveyardLabel").text = "GY: " + str(graveyard.size())
+	root.get_node("CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox/PlayerHPLabel").text = "HP: " + str(player_hp)
+	root.get_node("CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox/EnergyLabel").text   = str(current_energy) + "/" + str(max_energy) + " Energy"
+	var block_label = root.get_node("CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox/BlockLabel")
+	if player_defense > 0:
+		block_label.text    = "Block: " + str(player_defense)
+		block_label.visible = true
+	else:
+		block_label.visible = false
+	var relic_text = "Relics: " + ", ".join(GameState.relics) if GameState.relics.size() > 0 else "Relics: None"
+	root.get_node("CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox/RelicLabel").text    = relic_text
+	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobNameLabel").text        = mob_name
+	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobHPLabel").text          = "HP: " + str(mob_hp) + "/" + str(mob_max_hp)
+	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobATKLabel").text         = "ATK: " + str(mob_damage)
+	root.get_node("CanvasLayer/HUDRoot/BottomLeftHUD/DeckLabel").text                  = "Deck: " + str(deck.size())
+	root.get_node("CanvasLayer/HUDRoot/BottomRightHUD/GraveyardLabel").text            = "GY: " + str(graveyard.size())
 
 
 # =====================================================================
@@ -269,6 +308,12 @@ func start_turn():
 	print("--- Turn ", current_turn, " | Energy: ", current_energy, "/", max_energy, " ---")
 
 	draw_cards(5)
+
+	if current_turn == 1 and GameState.relics.has("Bandage Roll"):
+		player_defense += 5
+		print("Bandage Roll: started combat with 5 Block")
+		update_hud()
+
 	update_hud()
 
 
@@ -558,6 +603,7 @@ func take_player_damage(amount: int):
 	player_defense = 0
 	player_hp -= remainder
 	player_hp  = max(player_hp, 0)
+	GameState.player_hp = player_hp
 	update_hud()
 	print("Player takes ", remainder, " damage (", blocked, " blocked) — HP: ", player_hp)
 	if player_hp <= 0:

@@ -203,5 +203,8 @@ func _on_card_chosen(index: int) -> void:
 	GameState.reward_cards.append(chosen_card)
 	print("Reward: stored '", chosen_card.card_name, "' in GameState. Total reward cards: ", GameState.reward_cards.size())
 
+	GameState.nodes_completed.append(GameState.current_node)
+	print("Node ", GameState.current_node, " marked complete.")
+
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scene/combat_scene.tscn")
+	get_tree().change_scene_to_file("res://Scene/roadmap.tscn")

@@ -69,6 +69,20 @@ func setup(card):
 			type_label.text = "Unknown"
 			description_label.text = card.card_description
 
+	var style = StyleBoxFlat.new()
+	match card.card_type:
+		CardClass.CardType.ATTACK:
+			style.bg_color = Color(0.25, 0.1, 0.1, 1)
+		CardClass.CardType.SKILL:
+			style.bg_color = Color(0.1, 0.15, 0.25, 1)
+		CardClass.CardType.ANIMAL:
+			style.bg_color = Color(0.1, 0.2, 0.12, 1)
+		CardClass.CardType.COLOR:
+			style.bg_color = Color(0.18, 0.1, 0.25, 1)
+		_:
+			style.bg_color = Color(0.15, 0.15, 0.15, 1)
+	$CardBackground.add_theme_stylebox_override("panel", style)
+
 
 # =====================================================================
 # HOVER FUNCTIONS
