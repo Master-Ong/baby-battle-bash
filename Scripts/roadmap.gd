@@ -128,15 +128,16 @@ func _on_node_pressed(node_idx: int) -> void:
 
 	match type:
 		"Combat":
-			if node_idx == 0 or node_idx == 1:
-				GameState.encounter_number = 1
-			else:
-				GameState.encounter_number = 2
+			match node_idx:
+				0: GameState.encounter_number = 1
+				2: GameState.encounter_number = 2
+				3: GameState.encounter_number = 3
+				_: GameState.encounter_number = 1
 			get_tree().change_scene_to_file("res://Scene/combat_scene.tscn")
 		"Rest":
 			get_tree().change_scene_to_file("res://Scene/rest_site.tscn")
 		"Chest":
 			get_tree().change_scene_to_file("res://Scene/chest_site.tscn")
 		"Boss":
-			GameState.encounter_number = 2
+			GameState.encounter_number = 4
 			get_tree().change_scene_to_file("res://Scene/combat_scene.tscn")

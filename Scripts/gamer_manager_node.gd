@@ -110,11 +110,21 @@ func load_mob_data():
 			mob_hp     = 65
 			mob_max_hp = 65
 			mob_damage = 14
+		3:
+			mob_name   = "Swift Fox"
+			mob_hp     = 30
+			mob_max_hp = 30
+			mob_damage = 8
+		4:
+			mob_name   = "Stone Turtle"
+			mob_hp     = 90
+			mob_max_hp = 90
+			mob_damage = 6
 		_:
-			mob_name   = "Big Bear"
-			mob_hp     = 65
-			mob_max_hp = 65
-			mob_damage = 14
+			mob_name   = "Stone Turtle"
+			mob_hp     = 90
+			mob_max_hp = 90
+			mob_damage = 6
 
 
 # =====================================================================

@@ -1,48 +1,14 @@
 In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
-Read CLAUDE.md, res://Scene/combat_scene.tscn, and res://Scripts/gamer_manager_node.gd first.
-Reorganize CanvasLayer HUD structure. Smallest safe patch only.
-CRITICAL REQUIREMENT: Every single Control container node created must have mouse_filter set to MOUSE_FILTER_IGNORE. This includes HUDRoot, PlayerHUD, PlayerStatsVBox, MobHUD, MobStatsVBox, BottomLeftHUD, BottomRightHUD, and any other container added. Only Label nodes and EndTurnButton should have normal mouse filter. If this requirement cannot be guaranteed do not make any changes.
-Create this structure under CanvasLayer:
+Read CLAUDE.md, res://Scripts/roadmap_scene.gd, and res://Scripts/GameState.gd first.
+Problem: All combat encounters after Fight 1 show Big Bear instead of progressing through Swift Fox and Stone Turtle. The encounter_number is not incrementing correctly per roadmap node.
+Verify how encounter_number is being set when each combat node is clicked on the roadmap. It is likely hardcoded to 2 for all nodes after node 0.
+Fix the roadmap so each combat node sets GameState.encounter_number based on which node it is:
 
-HUDRoot (Control, full screen, MOUSE_FILTER_IGNORE)
+Node 0 (Fight 1) = encounter_number 1
+Node 1 or 2 depending on route (Fight 2) = encounter_number 2
+Node 3 (Fight 3) = encounter_number 3
+Node 4 (Boss) = encounter_number 4
 
-PlayerHUD (Control, top left anchor, MOUSE_FILTER_IGNORE)
-
-PlayerStatsVBox (VBoxContainer, MOUSE_FILTER_IGNORE)
-
-PlayerHPLabel
-EnergyLabel
-BlockLabel
-RelicLabel
-
-
-
-
-MobHUD (Control, top right anchor, MOUSE_FILTER_IGNORE)
-
-MobStatsVBox (VBoxContainer, MOUSE_FILTER_IGNORE)
-
-MobNameLabel
-MobHPLabel
-MobATKLabel
-
-
-
-
-BottomLeftHUD (Control, bottom left anchor, MOUSE_FILTER_IGNORE)
-
-DeckLabel
-
-
-BottomRightHUD (Control, bottom right anchor, MOUSE_FILTER_IGNORE)
-
-GraveyardLabel
-EndTurnButton
-
-
-
-
-
-Keep all existing label node names exactly the same. Update all node paths in gamer_manager_node.gd update_hud() to match new hierarchy.
-Do not touch gameplay logic, card drag, field slots, roadmap, reward, lose, menu, animal select, or GameState.
-List every file changed and confirm MOUSE_FILTER_IGNORE was set on every container node.
+The encounter_number should map directly to the node index or position in the route so each fight loads a different mob.
+Do not touch combat logic, reward screen, lose screen, rest site, chest site, animal select, main menu, card drag, or relic systems.
+List what changed and give a short test plan.
