@@ -21,10 +21,18 @@ theme_override_font_sizes/font_size = 48
 text = "Defeat!"
 horizontal_alignment = 1
 
-[node name="RetryButton" type="Button" parent="."]
+[node name="NewRunButton" type="Button" parent="."]
 offset_left = 476.0
-offset_top = 350.0
+offset_top = 340.0
 offset_right = 676.0
-offset_bottom = 400.0
+offset_bottom = 390.0
 theme_override_font_sizes/font_size = 24
-text = "Retry"
+text = "New Run"
+
+[node name="MainMenuButton" type="Button" parent="."]
+offset_left = 476.0
+offset_top = 410.0
+offset_right = 676.0
+offset_bottom = 460.0
+theme_override_font_sizes/font_size = 24
+text = "Main Menu"

@@ -1,18 +1,27 @@
 # lose_screen.gd
 # ------------------------------------------------------------------
 # Overlay shown after a combat defeat.
-# Displays a "Defeat!" message and a Retry button.
+# Displays a "Defeat!" message with New Run and Main Menu buttons.
 # process_mode is PROCESS_MODE_WHEN_PAUSED (set in tscn) so the
-# button stays responsive while get_tree().paused = true.
+# buttons stay responsive while get_tree().paused = true.
 # ------------------------------------------------------------------
 extends CanvasLayer
 
 
 func _ready():
-	$RetryButton.pressed.connect(_on_retry_pressed)
+	$NewRunButton.pressed.connect(_on_new_run_pressed)
+	$MainMenuButton.pressed.connect(_on_main_menu_pressed)
 
 
-func _on_retry_pressed():
-	queue_free()
+func _on_new_run_pressed():
+	GameState.reset_run()
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://Scene/combat_scene.tscn")
+	get_tree().change_scene_to_file("res://Scene/animal_select.tscn")
+	queue_free()
+
+
+func _on_main_menu_pressed():
+	GameState.reset_run()
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://Scene/main_menu.tscn")
+	queue_free()

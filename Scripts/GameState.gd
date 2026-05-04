@@ -8,3 +8,13 @@ var current_node: int = 0
 var nodes_completed: Array = []
 var player_hp: int = 50
 var relics: Array = []
+
+
+func reset_run():
+	selected_starter  = ""
+	reward_cards      = []
+	relics            = []
+	player_hp         = 50
+	encounter_number  = 1
+	nodes_completed   = []
+	current_node      = 0

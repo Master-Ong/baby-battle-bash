@@ -1,14 +1,31 @@
 In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
-Read CLAUDE.md, res://Scripts/roadmap_scene.gd, and res://Scripts/GameState.gd first.
-Problem: All combat encounters after Fight 1 show Big Bear instead of progressing through Swift Fox and Stone Turtle. The encounter_number is not incrementing correctly per roadmap node.
-Verify how encounter_number is being set when each combat node is clicked on the roadmap. It is likely hardcoded to 2 for all nodes after node 0.
-Fix the roadmap so each combat node sets GameState.encounter_number based on which node it is:
+Read CLAUDE.md, res://Scripts/GameState.gd, res://Scripts/lose_screen.gd, and res://Scene/lose_screen.tscn first.
+Upgrade the lose screen with New Run and Main Menu buttons. Smallest safe patch only.
+In res://Scripts/GameState.gd add a reset function:
+gdscriptfunc reset_run():
+    selected_starter = ""
+    reward_cards = []
+    relics = []
+    player_hp = 50
+    encounter_number = 1
+    nodes_completed = []
+    current_node = 0
+In res://Scripts/lose_screen.gd update the button layout:
+Replace the existing single Retry button with two buttons:
 
-Node 0 (Fight 1) = encounter_number 1
-Node 1 or 2 depending on route (Fight 2) = encounter_number 2
-Node 3 (Fight 3) = encounter_number 3
-Node 4 (Boss) = encounter_number 4
+Button named NewRunButton with text "New Run"
+Button named MainMenuButton with text "Main Menu"
 
-The encounter_number should map directly to the node index or position in the route so each fight loads a different mob.
-Do not touch combat logic, reward screen, lose screen, rest site, chest site, animal select, main menu, card drag, or relic systems.
-List what changed and give a short test plan.
+On NewRunButton pressed:
+gdscriptGameState.reset_run()
+get_tree().paused = false
+get_tree().change_scene_to_file("res://Scene/animal_select.tscn")
+queue_free()
+On MainMenuButton pressed:
+gdscriptGameState.reset_run()
+get_tree().paused = false
+get_tree().change_scene_to_file("res://Scene/main_menu.tscn")
+queue_free()
+In res://Scene/lose_screen.tscn update the layout to show both buttons clearly. Keep the Defeat title and dark overlay. Stack the two buttons vertically centered on screen with clear separation.
+Do not touch combat logic, reward screen, roadmap, chest site, rest site, animal select, or card drag logic.
+List every file changed, explain how New Run works, and give a short test plan.
