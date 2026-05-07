@@ -33,7 +33,7 @@ var card_name: String = ""
 # An enum is a list of named options. Instead of using numbers (0, 1, 2)
 # to mean Attack/Skill/Power — which is easy to forget — we give each
 # option a readable name. Godot turns them into numbers internally.
-enum CardType { ATTACK, SKILL, ANIMAL, COLOR, WORD }
+enum CardType { ATTACK, SKILL, ANIMAL, COLOR, WORD, ADJECTIVE }
 
 ## Which category this card belongs to
 var card_type: CardType = CardType.ATTACK

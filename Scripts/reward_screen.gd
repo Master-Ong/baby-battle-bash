@@ -187,11 +187,43 @@ func pick_rewards() -> void:
 	dash.card_description = "Deal 4 damage."
 	word_pool.append(dash)
 
-	var picked_animal = animal_pool[randi() % animal_pool.size()]
-	var picked_color  = color_pool[randi() % color_pool.size()]
-	var picked_word   = word_pool[randi() % word_pool.size()]
+	# --- Adjective pool ---
+	var adjective_pool: Array = []
 
-	show_rewards([picked_animal, picked_color, picked_word])
+	var big = CardClass.new()
+	big.card_name        = "BIG"
+	big.card_type        = CardClass.CardType.ADJECTIVE
+	big.energy_cost      = 1
+	big.effect_value     = 5
+	big.card_description = "All field animals gain +5 ATK and +5 HP."
+	adjective_pool.append(big)
+
+	var fast = CardClass.new()
+	fast.card_name        = "FAST"
+	fast.card_type        = CardClass.CardType.ADJECTIVE
+	fast.energy_cost      = 1
+	fast.effect_value     = 3
+	fast.card_description = "All field animals gain +3 ATK."
+	adjective_pool.append(fast)
+
+	var tough = CardClass.new()
+	tough.card_name        = "TOUGH"
+	tough.card_type        = CardClass.CardType.ADJECTIVE
+	tough.energy_cost      = 1
+	tough.effect_value     = 6
+	tough.card_description = "All field animals gain +6 HP."
+	adjective_pool.append(tough)
+
+	var picked_animal = animal_pool[randi() % animal_pool.size()]
+	var use_adjective = randf() < 0.3
+	var modifier_card
+	if use_adjective:
+		modifier_card = adjective_pool.pick_random()
+	else:
+		modifier_card = color_pool.pick_random()
+	var picked_word = word_pool[randi() % word_pool.size()]
+
+	show_rewards([picked_animal, modifier_card, picked_word])
 
 
 # =====================================================================

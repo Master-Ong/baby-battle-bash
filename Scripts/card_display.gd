@@ -65,6 +65,9 @@ func setup(card):
 		CardClass.CardType.ANIMAL:
 			type_label.text = "Animal"
 			description_label.text = "ATK: " + str(card.animal_atk) + "  HP: " + str(card.animal_hp)
+		CardClass.CardType.ADJECTIVE:
+			type_label.text = "Adjective"
+			description_label.text = card.card_description
 		_:
 			type_label.text = "Unknown"
 			description_label.text = card.card_description
@@ -79,6 +82,8 @@ func setup(card):
 			style.bg_color = Color(0.1, 0.2, 0.12, 1)
 		CardClass.CardType.COLOR:
 			style.bg_color = Color(0.18, 0.1, 0.25, 1)
+		CardClass.CardType.ADJECTIVE:
+			style.bg_color = Color(0.3, 0.25, 0.05, 1)
 		_:
 			style.bg_color = Color(0.15, 0.15, 0.15, 1)
 	$CardBackground.add_theme_stylebox_override("panel", style)
@@ -137,6 +142,8 @@ func _on_input_event(_viewport, event, _shape_idx):
 				manager.play_attack_card(card_data, self)
 			elif card_data.card_type == CardClass.CardType.SKILL:
 				manager.play_skill_card(card_data, self)
+			elif card_data.card_type == CardClass.CardType.ADJECTIVE:
+				manager.play_color_or_word_card(card_data, self)
 			else:
 				manager.play_color_or_word_card(card_data, self)
 

@@ -1,31 +1,74 @@
 In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
-Read CLAUDE.md, res://Scripts/GameState.gd, res://Scripts/lose_screen.gd, and res://Scene/lose_screen.tscn first.
-Upgrade the lose screen with New Run and Main Menu buttons. Smallest safe patch only.
-In res://Scripts/GameState.gd add a reset function:
-gdscriptfunc reset_run():
-    selected_starter = ""
-    reward_cards = []
-    relics = []
-    player_hp = 50
-    encounter_number = 1
-    nodes_completed = []
-    current_node = 0
-In res://Scripts/lose_screen.gd update the button layout:
-Replace the existing single Retry button with two buttons:
 
-Button named NewRunButton with text "New Run"
-Button named MainMenuButton with text "Main Menu"
+Read these files before making any changes:
+1. CLAUDE.md
+2. res://Scripts/gamer_manager_node.gd — read play_attack_card (around line 525)
+   and resolve_combat (around line 650)
 
-On NewRunButton pressed:
-gdscriptGameState.reset_run()
-get_tree().paused = false
-get_tree().change_scene_to_file("res://Scene/animal_select.tscn")
-queue_free()
-On MainMenuButton pressed:
-gdscriptGameState.reset_run()
-get_tree().paused = false
-get_tree().change_scene_to_file("res://Scene/main_menu.tscn")
-queue_free()
-In res://Scene/lose_screen.tscn update the layout to show both buttons clearly. Keep the Defeat title and dark overlay. Stack the two buttons vertically centered on screen with clear separation.
-Do not touch combat logic, reward screen, roadmap, chest site, rest site, animal select, or card drag logic.
-List every file changed, explain how New Run works, and give a short test plan.
+---
+
+BUG:
+After the deferred outcome patch, the terminal outcome check only runs
+inside resolve_combat() at End Turn. If the player plays a Strike card
+that kills the mob during their turn, mob HP hits 0 but nothing checks
+for victory. The player has to press End Turn before the reward screen
+appears. Victory should trigger immediately after the attack resolves.
+
+CAUSE:
+take_mob_damage() no longer calls win_combat() (correctly removed in
+the previous patch). But no replacement check was added after player
+card actions that deal mob damage.
+
+GOAL:
+Create one reusable outcome checker. Call it after any player action
+that can reduce mob HP. Keep the existing combat_ended guard.
+
+FIX — three changes in gamer_manager_node.gd only:
+
+1. Add a new helper function in Section 18 (near win_combat/lose_combat):
+
+   func check_combat_outcome():
+       if player_hp <= 0:
+           lose_combat()
+       elif mob_hp <= 0:
+           win_combat()
+
+2. At the END of play_attack_card(), after the existing update_hud() call,
+   add one line:
+
+   check_combat_outcome()
+
+3. In resolve_combat(), REPLACE the existing inline terminal check:
+
+   OLD (remove these 5 lines):
+       if player_hp <= 0:
+           lose_combat()
+           return
+       if mob_hp <= 0:
+           win_combat()
+           return
+
+   NEW (replace with):
+       check_combat_outcome()
+       if combat_ended:
+           return
+
+RULES:
+- Only edit gamer_manager_node.gd
+- Do not touch any other file
+- Do not change take_mob_damage()
+- Do not change take_player_damage()
+- Do not change win_combat() or lose_combat() — keep the combat_ended guards
+- Do not change damage math
+- Do not change card effects or energy costs
+- Do not change reward screen, lose screen, roadmap, animal select, GameState
+- Do not change field_slots behavior
+- Do not change UI layout
+- Smallest safe patch only — one new helper, one call after attack, one replacement in resolve_combat
+
+AFTER THE FIX, REPORT:
+1. Show the new check_combat_outcome() function
+2. Show the updated play_attack_card() function
+3. Show the updated resolve_combat() terminal check section
+4. Confirm win_combat() and lose_combat() guards are unchanged
+5. Confirm no other files were touched

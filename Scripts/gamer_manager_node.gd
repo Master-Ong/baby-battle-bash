@@ -69,7 +69,8 @@ var max_field_slots: int    = 3
 # SECTION 7 — TURN PHASES
 # =====================================================================
 enum Phase { DRAW, PLAYER_TURN, ENEMY_TURN, END_TURN }
-var current_phase: Phase = Phase.DRAW
+var current_phase: Phase  = Phase.DRAW
+var combat_ended: bool    = false
 
 
 # =====================================================================
@@ -99,6 +100,7 @@ func is_slot_empty(slot_index: int) -> bool:
 # SECTION 7c — MOB DATA LOADER
 # =====================================================================
 func load_mob_data():
+	combat_ended = false
 	match GameState.encounter_number:
 		1:
 			mob_name   = "Mr. Kiwi"
@@ -531,6 +533,7 @@ func play_attack_card(card, card_visual):
 	hand_visuals.erase(card_visual)
 	card_visual.queue_free()
 	update_hud()
+	check_combat_outcome()
 
 
 # Play a skill card: spend energy, apply effect, send to graveyard.
@@ -569,6 +572,22 @@ func play_color_or_word_card(card, card_visual):
 		player_hp = min(player_hp + card.effect_value, 50)
 		print("Healed ", card.effect_value, " HP — HP: ", player_hp)
 		update_hud()
+	elif card.card_name == "BIG":
+		for animal in get_field_animals():
+			animal.animal_atk += 5
+			animal.animal_hp += 5
+		spawn_field_visuals()
+		update_hud()
+	elif card.card_name == "FAST":
+		for animal in get_field_animals():
+			animal.animal_atk += 3
+		spawn_field_visuals()
+		update_hud()
+	elif card.card_name == "TOUGH":
+		for animal in get_field_animals():
+			animal.animal_hp += 6
+		spawn_field_visuals()
+		update_hud()
 	else:
 		for animal in get_field_animals():
 			animal.animal_atk += card.effect_value
@@ -580,16 +599,24 @@ func play_color_or_word_card(card, card_visual):
 # SECTION 18 — COMBAT RESOLUTION
 # =====================================================================
 
+func check_combat_outcome():
+	if player_hp <= 0:
+		lose_combat()
+	elif mob_hp <= 0:
+		win_combat()
+
+
 func take_mob_damage(amount: int):
 	mob_hp -= amount
 	mob_hp  = max(mob_hp, 0)
 	update_hud()
 	print("Mob takes ", amount, " damage — HP: ", mob_hp, "/", mob_max_hp)
-	if mob_hp <= 0:
-		win_combat()
 
 
 func win_combat():
+	if combat_ended:
+		return
+	combat_ended = true
 	print("You defeated ", mob_name, "!")
 
 	# Spawn the reward screen — it builds its own pools and picks 3 cards
@@ -601,6 +628,9 @@ func win_combat():
 
 
 func lose_combat():
+	if combat_ended:
+		return
+	combat_ended = true
 	print("You were defeated!")
 	var lose_screen = LoseScene.instantiate()
 	get_tree().root.add_child(lose_screen)
@@ -616,8 +646,6 @@ func take_player_damage(amount: int):
 	GameState.player_hp = player_hp
 	update_hud()
 	print("Player takes ", remainder, " damage (", blocked, " blocked) — HP: ", player_hp)
-	if player_hp <= 0:
-		lose_combat()
 
 
 # Combat sequence called at the end of each player turn:
@@ -651,6 +679,11 @@ func resolve_combat():
 			break
 	if all_empty:
 		take_player_damage(mob_damage)
+
+	# --- Terminal outcome check (defeat wins ties) ---
+	check_combat_outcome()
+	if combat_ended:
+		return
 
 	# 4. Refresh field, discard hand, start the next turn
 	spawn_field_visuals()
