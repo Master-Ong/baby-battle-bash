@@ -146,3 +146,102 @@ offset_right = 250.0
 offset_bottom = 290.0
 theme_override_font_sizes/font_size = 20
 text = "Choose"
+
+[node name="TestCardsLabel" type="Label" parent="CanvasLayer"]
+offset_left = 276.0
+offset_top = 500.0
+offset_right = 876.0
+offset_bottom = 525.0
+theme_override_font_sizes/font_size = 16
+text = "TEST CARDS (toggle on/off)"
+horizontal_alignment = 1
+
+[node name="TestBIG" type="Button" parent="CanvasLayer"]
+offset_left = 166.0
+offset_top = 540.0
+offset_right = 286.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "BIG"
+
+[node name="TestFAST" type="Button" parent="CanvasLayer"]
+offset_left = 306.0
+offset_top = 540.0
+offset_right = 426.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "FAST"
+
+[node name="TestTOUGH" type="Button" parent="CanvasLayer"]
+offset_left = 446.0
+offset_top = 540.0
+offset_right = 566.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "TOUGH"
+
+[node name="TestSHARP" type="Button" parent="CanvasLayer"]
+offset_left = 586.0
+offset_top = 540.0
+offset_right = 706.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "SHARP"
+
+[node name="TestSMART" type="Button" parent="CanvasLayer"]
+offset_left = 726.0
+offset_top = 540.0
+offset_right = 846.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "SMART"
+
+[node name="TestMAGIC" type="Button" parent="CanvasLayer"]
+offset_left = 866.0
+offset_top = 540.0
+offset_right = 986.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "MAGIC"
+
+[node name="TestPounce" type="Button" parent="CanvasLayer"]
+offset_left = 306.0
+offset_top = 595.0
+offset_right = 426.0
+offset_bottom = 635.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Pounce"
+
+[node name="TestRoar" type="Button" parent="CanvasLayer"]
+offset_left = 446.0
+offset_top = 595.0
+offset_right = 566.0
+offset_bottom = 635.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Roar"
+
+[node name="TestCurlUp" type="Button" parent="CanvasLayer"]
+offset_left = 586.0
+offset_top = 595.0
+offset_right = 706.0
+offset_bottom = 635.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Curl Up"
+
+[node name="TestGuard" type="Button" parent="CanvasLayer"]
+offset_left = 726.0
+offset_top = 595.0
+offset_right = 846.0
+offset_bottom = 635.0
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Guard"

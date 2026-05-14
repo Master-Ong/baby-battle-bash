@@ -101,32 +101,45 @@ func is_slot_empty(slot_index: int) -> bool:
 # =====================================================================
 func load_mob_data():
 	combat_ended = false
+	var mob_pool = []
+
 	match GameState.encounter_number:
-		1:
-			mob_name   = "Mr. Kiwi"
-			mob_hp     = 40
-			mob_max_hp = 40
-			mob_damage = 10
-		2:
-			mob_name   = "Big Bear"
-			mob_hp     = 65
-			mob_max_hp = 65
-			mob_damage = 14
+		1, 2:
+			mob_pool = [
+				{"name": "Mr. Kiwi",         "hp": 40, "damage": 8},
+				{"name": "Prickly Hedgehog",  "hp": 35, "damage": 10},
+			]
 		3:
-			mob_name   = "Swift Fox"
-			mob_hp     = 30
-			mob_max_hp = 30
-			mob_damage = 8
+			mob_pool = [
+				{"name": "Big Bear",     "hp": 80, "damage": 12},
+				{"name": "Swift Fox",    "hp": 50, "damage": 10},
+				{"name": "Sleepy Owl",   "hp": 55, "damage": 9},
+				{"name": "Muddy Piglet", "hp": 45, "damage": 11},
+			]
 		4:
-			mob_name   = "Stone Turtle"
-			mob_hp     = 90
-			mob_max_hp = 90
-			mob_damage = 6
+			mob_pool = [
+				{"name": "Baby Dragon", "hp": 90, "damage": 16},
+			]
 		_:
-			mob_name   = "Stone Turtle"
-			mob_hp     = 90
-			mob_max_hp = 90
-			mob_damage = 6
+			mob_pool = [
+				{"name": "Stone Turtle",   "hp": 90, "damage": 14},
+				{"name": "Sneaky Raccoon", "hp": 70, "damage": 15},
+			]
+
+	# Filter out last mob if pool has more than one option
+	if mob_pool.size() > 1 and GameState.last_mob_name != "":
+		mob_pool = mob_pool.filter(func(m): return m["name"] != GameState.last_mob_name)
+
+	# Pick random mob from filtered pool
+	var mob    = mob_pool[randi() % mob_pool.size()]
+	mob_name   = mob["name"]
+	mob_hp     = mob["hp"]
+	mob_max_hp = mob["hp"]
+	mob_damage = mob["damage"]
+
+	# Save for next combat
+	GameState.last_mob_name = mob_name
+	print("Encounter ", GameState.encounter_number, ": ", mob_name)
 
 
 # =====================================================================
@@ -314,6 +327,7 @@ func _build_dog_deck():
 func start_turn():
 	current_turn   += 1
 	current_energy  = max_energy
+	player_defense  = 0
 	current_phase   = Phase.DRAW
 
 	print("")
@@ -330,9 +344,7 @@ func start_turn():
 
 
 func end_turn():
-	current_phase  = Phase.ENEMY_TURN
-	player_defense = 0
-
+	current_phase = Phase.ENEMY_TURN
 	resolve_combat()
 
 
@@ -588,6 +600,18 @@ func play_color_or_word_card(card, card_visual):
 			animal.animal_hp += 6
 		spawn_field_visuals()
 		update_hud()
+	elif card.card_name == "SHARP":
+		for animal in get_field_animals():
+			animal.animal_atk += 4
+		spawn_field_visuals()
+		update_hud()
+	elif card.card_name == "SMART":
+		draw_cards(2)
+		update_hud()
+	elif card.card_name == "MAGIC":
+		player_defense += 8
+		print("Gained 8 Block")
+		update_hud()
 	else:
 		for animal in get_field_animals():
 			animal.animal_atk += card.effect_value
@@ -619,10 +643,14 @@ func win_combat():
 	combat_ended = true
 	print("You defeated ", mob_name, "!")
 
-	# Spawn the reward screen — it builds its own pools and picks 3 cards
-	var reward = RewardScene.instantiate()
-	get_tree().root.get_node("CombatScene").add_child(reward)
-	reward.pick_rewards()
+	if GameState.is_boss_fight:
+		var win_screen = load("res://Scene/win_screen.tscn").instantiate()
+		get_tree().root.add_child(win_screen)
+	else:
+		# Spawn the reward screen — it builds its own pools and picks 3 cards
+		var reward = RewardScene.instantiate()
+		get_tree().root.get_node("CombatScene").add_child(reward)
+		reward.pick_rewards()
 
 	get_tree().paused = true
 
@@ -665,6 +693,7 @@ func resolve_combat():
 		if field_slots[i] != null:
 			var animal = field_slots[i]
 			animal.animal_hp -= mob_damage
+			animal.animal_hp = max(animal.animal_hp, 0)
 			print(animal.card_name, " takes ", mob_damage, " — HP: ", animal.animal_hp)
 			if animal.animal_hp <= 0:
 				graveyard.append(animal)

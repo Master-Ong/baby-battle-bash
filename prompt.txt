@@ -2,73 +2,67 @@ In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
 
 Read these files before making any changes:
 1. CLAUDE.md
-2. res://Scripts/gamer_manager_node.gd — read play_attack_card (around line 525)
-   and resolve_combat (around line 650)
+2. res://Scripts/GameState.gd
+3. res://Scripts/reward_screen.gd — read _ready(), _on_card_chosen(), and the gold_earned variable
 
 ---
 
-BUG:
-After the deferred outcome patch, the terminal outcome check only runs
-inside resolve_combat() at End Turn. If the player plays a Strike card
-that kills the mob during their turn, mob HP hits 0 but nothing checks
-for victory. The player has to press End Turn before the reward screen
-appears. Victory should trigger immediately after the attack resolves.
-
-CAUSE:
-take_mob_damage() no longer calls win_combat() (correctly removed in
-the previous patch). But no replacement check was added after player
-card actions that deal mob damage.
-
 GOAL:
-Create one reusable outcome checker. Call it after any player action
-that can reduce mob HP. Keep the existing combat_ended guard.
+Add real persistent gold to GameState. Award gold on combat win.
+Display current gold on the reward screen. Smallest safe patch only.
 
-FIX — three changes in gamer_manager_node.gd only:
+CHANGES — two files only:
 
-1. Add a new helper function in Section 18 (near win_combat/lose_combat):
+FILE 1: res://Scripts/GameState.gd
 
-   func check_combat_outcome():
-       if player_hp <= 0:
-           lose_combat()
-       elif mob_hp <= 0:
-           win_combat()
+Add a new variable after is_boss_fight:
+    var gold: int = 0
 
-2. At the END of play_attack_card(), after the existing update_hud() call,
-   add one line:
+In reset_run(), add:
+    gold = 0
 
-   check_combat_outcome()
+FILE 2: res://Scripts/reward_screen.gd
 
-3. In resolve_combat(), REPLACE the existing inline terminal check:
+Change 1 — In _ready(), update the gold label to show current gold
+plus the amount being earned:
 
-   OLD (remove these 5 lines):
-       if player_hp <= 0:
-           lose_combat()
-           return
-       if mob_hp <= 0:
-           win_combat()
-           return
+Replace:
+    gold_label.text = "Gold: +" + str(gold_earned)
 
-   NEW (replace with):
-       check_combat_outcome()
-       if combat_ended:
-           return
+With:
+    gold_label.text = "Gold: " + str(GameState.gold) + "  (+" + str(gold_earned) + ")"
+
+This shows something like "Gold: 20  (+10)" so the player sees
+their total AND what they're about to earn.
+
+Change 2 — In _on_card_chosen(), BEFORE the GameState.reward_cards
+append line, add:
+
+    GameState.gold += gold_earned
+    print("Gold earned: ", gold_earned, " | Total gold: ", GameState.gold)
+
+This awards gold exactly once per combat win — _on_card_chosen fires
+once then the scene changes, so there is no duplicate risk.
+
+Do NOT remove the existing gold_earned variable — it still defines
+how much gold this combat awards.
 
 RULES:
-- Only edit gamer_manager_node.gd
+- Only edit GameState.gd and reward_screen.gd
 - Do not touch any other file
-- Do not change take_mob_damage()
-- Do not change take_player_damage()
-- Do not change win_combat() or lose_combat() — keep the combat_ended guards
-- Do not change damage math
-- Do not change card effects or energy costs
-- Do not change reward screen, lose screen, roadmap, animal select, GameState
-- Do not change field_slots behavior
-- Do not change UI layout
-- Smallest safe patch only — one new helper, one call after attack, one replacement in resolve_combat
+- Do not change pick_rewards()
+- Do not change card pool definitions
+- Do not change how _on_card_chosen adds cards to reward_cards
+- Do not change nodes_completed logic
+- Do not change scene transition at the end of _on_card_chosen
+- Do not change combat, boss, win_combat, lose_combat
+- Do not change roadmap, animal select, main menu, lose screen
+- Do not create shop scene or shop script
+- Smallest safe patch only
 
 AFTER THE FIX, REPORT:
-1. Show the new check_combat_outcome() function
-2. Show the updated play_attack_card() function
-3. Show the updated resolve_combat() terminal check section
-4. Confirm win_combat() and lose_combat() guards are unchanged
+1. Show the full updated GameState.gd
+2. Show the updated _ready() function from reward_screen.gd
+3. Show the updated _on_card_chosen() function from reward_screen.gd
+4. Confirm gold_earned variable is preserved
 5. Confirm no other files were touched

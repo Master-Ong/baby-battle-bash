@@ -29,7 +29,7 @@ func _ready():
 	# Run even while the tree is paused so buttons stay responsive.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	gold_label.text = "Gold: +" + str(gold_earned)
+	gold_label.text = "Gold: " + str(GameState.gold) + "  (+" + str(gold_earned) + ")"
 
 	card_option_0.pressed.connect(_on_card_chosen.bind(0))
 	card_option_1.pressed.connect(_on_card_chosen.bind(1))
@@ -187,6 +187,38 @@ func pick_rewards() -> void:
 	dash.card_description = "Deal 4 damage."
 	word_pool.append(dash)
 
+	var pounce = CardClass.new()
+	pounce.card_name        = "Pounce"
+	pounce.card_type        = CardClass.CardType.ATTACK
+	pounce.energy_cost      = 1
+	pounce.effect_value     = 8
+	pounce.card_description = "Deal 8 damage."
+	word_pool.append(pounce)
+
+	var roar = CardClass.new()
+	roar.card_name        = "Roar"
+	roar.card_type        = CardClass.CardType.ATTACK
+	roar.energy_cost      = 2
+	roar.effect_value     = 14
+	roar.card_description = "Deal 14 damage."
+	word_pool.append(roar)
+
+	var curl_up = CardClass.new()
+	curl_up.card_name        = "Curl Up"
+	curl_up.card_type        = CardClass.CardType.SKILL
+	curl_up.energy_cost      = 1
+	curl_up.effect_value     = 8
+	curl_up.card_description = "Gain 8 Block."
+	word_pool.append(curl_up)
+
+	var guard = CardClass.new()
+	guard.card_name        = "Guard"
+	guard.card_type        = CardClass.CardType.SKILL
+	guard.energy_cost      = 2
+	guard.effect_value     = 15
+	guard.card_description = "Gain 15 Block."
+	word_pool.append(guard)
+
 	# --- Adjective pool ---
 	var adjective_pool: Array = []
 
@@ -214,6 +246,30 @@ func pick_rewards() -> void:
 	tough.card_description = "All field animals gain +6 HP."
 	adjective_pool.append(tough)
 
+	var sharp = CardClass.new()
+	sharp.card_name        = "SHARP"
+	sharp.card_type        = CardClass.CardType.ADJECTIVE
+	sharp.energy_cost      = 1
+	sharp.effect_value     = 4
+	sharp.card_description = "All field animals gain +4 ATK."
+	adjective_pool.append(sharp)
+
+	var smart = CardClass.new()
+	smart.card_name        = "SMART"
+	smart.card_type        = CardClass.CardType.ADJECTIVE
+	smart.energy_cost      = 1
+	smart.effect_value     = 2
+	smart.card_description = "Draw 2 cards."
+	adjective_pool.append(smart)
+
+	var magic = CardClass.new()
+	magic.card_name        = "MAGIC"
+	magic.card_type        = CardClass.CardType.ADJECTIVE
+	magic.energy_cost      = 1
+	magic.effect_value     = 8
+	magic.card_description = "Gain 8 Block."
+	adjective_pool.append(magic)
+
 	var picked_animal = animal_pool[randi() % animal_pool.size()]
 	var use_adjective = randf() < 0.3
 	var modifier_card
@@ -231,6 +287,9 @@ func pick_rewards() -> void:
 # =====================================================================
 func _on_card_chosen(index: int) -> void:
 	var chosen_card = _card_options[index]
+
+	GameState.gold += gold_earned
+	print("Gold earned: ", gold_earned, " | Total gold: ", GameState.gold)
 
 	GameState.reward_cards.append(chosen_card)
 	print("Reward: stored '", chosen_card.card_name, "' in GameState. Total reward cards: ", GameState.reward_cards.size())

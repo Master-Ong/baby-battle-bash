@@ -128,6 +128,7 @@ func _on_node_pressed(node_idx: int) -> void:
 
 	match type:
 		"Combat":
+			GameState.is_boss_fight = false
 			match node_idx:
 				0: GameState.encounter_number = 1
 				2: GameState.encounter_number = 2
@@ -139,5 +140,6 @@ func _on_node_pressed(node_idx: int) -> void:
 		"Chest":
 			get_tree().change_scene_to_file("res://Scene/chest_site.tscn")
 		"Boss":
+			GameState.is_boss_fight = true
 			GameState.encounter_number = 4
 			get_tree().change_scene_to_file("res://Scene/combat_scene.tscn")
