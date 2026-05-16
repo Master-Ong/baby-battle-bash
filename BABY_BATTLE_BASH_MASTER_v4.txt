@@ -1,0 +1,230 @@
+# BABY BATTLE BASH — MASTER CONTEXT DOCUMENT
+Last Updated: 2026-05-16 (Session End)
+
+## PROJECT OVERVIEW
+Baby Battle Bash is a Slay the Spire-style roguelike deckbuilding card game built in Godot 4.6.2.
+Path: C:\Users\Nicky\Documents\baby-battle-bash
+Developer: Nicky (beginner solo dev, learning through real project reps)
+
+## CURRENT STATE — WHAT WORKS ✅
+
+**Core Loop:**
+- Full roguelike loop: Main Menu → Animal Select → Roadmap → Combat → Reward → Roadmap
+- Lose screen with New Run and Main Menu
+- Run Complete screen (after boss) with clean Main Menu return
+- GameState.reset_run() works cleanly between runs
+
+**Map 1 Content:**
+- 7 roadmap nodes: Combat, Rest, Combat, Combat, Shop, Chest, Boss
+- Rest Site heals 15 HP
+- Chest Site gives random relic from pool
+- Boss node: Baby Dragon (90 HP, 16 ATK)
+
+**Gold System:**
+- GameState.gold starts at 0
+- Normal combat reward awards +10 gold
+- Gold accumulates during run
+- Gold resets on new run
+- Boss victory does not award gold
+
+**Relic System:**
+- GameState.relics is an Array of strings
+- Relic pool in chest_site.gd with 3 relics:
+  - Bandage Roll: 5 Block on turn 1
+  - Iron Shield: 3 Block on turn 1
+  - Lucky Coin: +5 gold after normal combat
+- Chest randomly picks one unowned relic
+- Duplicate prevention (won't offer what you already own)
+- "No new relics" when all 3 owned
+- Relics stack (Bandage Roll + Iron Shield = 8 Block turn 1)
+- DevDock relic toggle row on Animal Select (3 buttons)
+
+**Shop System (3-Tab):**
+- Tab 1 — Market: 3 unique card offers, Adopt (10g), Reroll (1g per slot)
+- Tab 2 — Training Camp: Fusion v0 (2 Bunny→Bunny+, 2 Turtle→Turtle+, 2 Dog→Dog+)
+- Tab 3 — Card Removal: Remove earned cards for 3g, grouped "Village Market Stalls" UI
+- Card Removal has 4 stall columns (Animals, Colors, Adjectives, Verbs/Skills)
+- Master confirmation box at bottom (select then confirm)
+- Starter deck cards don't appear in removal (they're not in reward_cards)
+- Return to Roadmap preserves run state
+
+**Fusion/Evolution v0:**
+- Uses exact card_name matching (Bunny+ does NOT count as Bunny)
+- Removes 2 base cards, adds 1 upgraded card from CardDatabase
+- Free (no gold cost)
+- Only works on reward/shop/test-selector animals (NOT starter deck copies)
+- STATUS: Tested and working
+
+**Shared CardDatabase:**
+- res://Scripts/CardDatabase.gd
+- Static functions: get_animals(), get_colors(), get_adjectives(), get_attacks(), get_skills(), get_upgraded_animals()
+- Rewards and Shop both use shared definitions
+
+**Card Pool:**
+- Animals: Bunny (4/12), Turtle (2/20), Dog (8/10)
+- Upgraded: Bunny+ (6/16), Turtle+ (4/28), Dog+ (12/14)
+- Colors: Blue (draw 1), Red (+2 ATK), Green (heal 3), Yellow (gain 1 energy), Purple (6 Block), White (+2 ATK/+4 HP to field animals)
+- Adjectives: BIG, FAST, TOUGH, SHARP, SMART, MAGIC
+- Attacks: Strike, Scratch, Bite, Dash (4 dmg + draw 1), Pounce, Roar
+- Skills: Defend, Hide, Run Away, Block, Curl Up, Guard, Scout (1 block + draw 1), Sneak (4 block + draw 1)
+
+**Mob Pool:**
+- Early: Mr. Kiwi (40/8), Prickly Hedgehog (35/10)
+- Mid: Big Bear (80/12), Swift Fox (50/10), Sleepy Owl (55/9), Muddy Piglet (45/11)
+- Hard: Stone Turtle (90/14), Sneaky Raccoon (70/15)
+- Boss: Baby Dragon (90/16)
+- Tier-based randomization, no immediate repeats
+
+**Animal Select DevDock (Test Tools):**
+- 5 rows: Animals, Colors, Adjectives, Verbs, Relics
+- Toggle buttons with tooltips
+- Selected cards/relics append to starter deck/GameState.relics
+
+**Combat Systems:**
+- Combat end-state handling is stable (combat_ended guard, deferred outcome check)
+- Block system works (player_defense consumed before HP)
+- Field animals with 0 HP are removed to graveyard
+- Negative HP clamped to 0 for display
+- field_slots is the source of truth
+- Card HP mutation bug FIXED (cards cloned when building combat deck)
+- All color card handlers are explicit (Blue, Red, Green, Yellow, Purple, White)
+
+## QUEUED PATCHES (written, verified, not yet sent to CC)
+
+Send to CC in this exact order:
+
+1. **Bug Fix — Training Camp click-through + Boss HP init**
+   File: prompt_bugfix_training_bossHP.txt
+   - Adds dark overlay behind Training Camp panel (MOUSE_FILTER_STOP)
+   - Explicit mob state reset in _ready() before load_mob_data()
+   - Defensive HUD clamp for mob HP display
+
+2. **Starter Deck Archetype Pass v1**
+   File: prompt_starter_decks_v1.txt
+   - Bunny (Speed): 3 Bunny, 3 Strike, 2 Defend, 2 Dash, 1 Scout, 1 Blue (12 cards)
+   - Turtle (Defense): 3 Turtle, 3 Strike, 2 Defend, 2 Curl Up, 1 Green, 1 Purple (12 cards)
+   - Dog (Power): 3 Dog, 3 Strike, 2 Defend, 2 Pounce, 1 Bite, 1 Red (12 cards)
+   - Down from 17 identical cards to 12 distinct cards per starter
+
+3. **Shop 3-Tab Refactor + Card Removal**
+   File: prompt_shop_tabs_card_removal.txt
+   - Replaces procedural flat shop with 3-tab layout
+   - Market, Training Camp, Card Removal tabs
+   - Card Removal costs 3g, removes from GameState.reward_cards only
+
+4. **Village Market Stalls UI**
+   File: prompt_removal_stalls_ui.txt
+   - Replaces flat removal list with 4 stall columns
+   - Click to select, master confirm button to remove
+   - Alphabetical sorting within stalls
+
+## CRITICAL BUG FIXES APPLIED
+
+1. **Win screen cleanup** — queue_free() added to prevent overlay persistence
+2. **Negative animal HP** — Clamped to max(animal_hp, 0) after mob damage
+3. **Card mutation bug** — build_starting_deck() now clones reward_cards entries
+4. **Combat end-state overlap** — combat_ended guard prevents victory/defeat double-triggers
+5. **Explicit Red handler** — Red card no longer falls through to else block
+
+## KEY ARCHITECTURE FACTS
+
+- **No persistent deck in GameState.** Combat decks built fresh each fight in build_starting_deck()
+- **GameState.reward_cards** holds earned/bought cards only (Array of Card Resources)
+- **Starter cards** (Strike, Defend, starter animal) created inline in _build_*_deck(), NOT in reward_cards
+- **Card Removal** can only remove from reward_cards. Starter cards never appear.
+- **GameState.selected_starter** already exists as a String
+- **No player_max_hp exists** — Snack Pack relic deferred until max_hp is added
+- **All color handlers are now explicit** (Blue, Red, Green, Yellow, Purple, White)
+
+## DEFERRED FOR LATER
+
+- Snack Pack relic (needs max_hp implementation)
+- Color/adjective fusion
+- Fusing starter deck copies
+- Blueprint stage names (Bunny → Rabbit → Fluffle)
+- RPS type triangle
+- Rarity system
+- Advanced mode percentages/conditionals
+- Permanent collection/meta-progression
+- Map 2 expansion
+- Final JPG storybook map background
+- UI/sprite/animation polish
+
+## NEXT PRIORITIES (after queued patches are applied)
+
+1. Roadmap pacing expansion (more nodes before boss, longer runs)
+2. More relics (Snack Pack needs max_hp first)
+3. Card pool expansion (more attacks/skills for variety)
+4. Map 2
+
+## WORKFLOW RULES
+
+**ChatGPT → Claude.ai → Claude Code:**
+1. ChatGPT drafts feature ideas
+2. Claude.ai verifies against real project files via Godot MCP
+3. Claude Code builds only after verification
+4. Never send raw ChatGPT prompts directly to CC
+
+**Patch discipline:**
+- Smallest safe patch only
+- One system at a time
+- Long prompts go through prompt.txt
+- Run CC with: `claude -p prompt.txt` or paste in Code tab
+
+**Model recommendations:**
+- Claude.ai chat: Opus (thinking/verification)
+- Code tab: Sonnet 4.6, High effort (executing prompts)
+
+**Screenshot validation after CC builds:**
+1. Nicky takes a screenshot of the result in Godot
+2. Nicky pastes the screenshot in Claude.ai chat
+3. Claude verifies the result visually
+4. Then proceed to next task
+
+## TECHNICAL WARNINGS
+
+- **Any full-screen Control node in combat scene MUST use MOUSE_FILTER_IGNORE**
+- **field_slots is the source of truth** — don't bypass it
+- **Combat end-state handling is fragile** — handle with care
+- **Cards in GameState.reward_cards must be cloned before combat use** — already fixed
+- **CanvasLayer overlays added to get_tree().root MUST call queue_free() before scene change**
+- **CombatScene root position must be (0, 0)**
+- **"Defend" card exists only in starter decks, not in CardDatabase** — resolves through generic skill handler
+- **No player_max_hp exists** — do not add healing without a cap
+
+## KEY FILES
+
+- res://Scripts/gamer_manager_node.gd — main combat manager
+- res://Scripts/GameState.gd — persistent run state (autoload)
+- res://Scripts/CardDatabase.gd — shared card pool
+- res://Scripts/card_display.gd — card drag/drop and play logic
+- res://Scripts/Card.gd — card data structure
+- res://Scripts/reward_screen.gd — post-combat rewards
+- res://Scripts/shop.gd — 3-tab shop (Market, Training, Removal)
+- res://Scripts/chest_site.gd — relic pool chest
+- res://Scripts/lose_screen.gd — defeat screen
+- res://Scripts/win_screen.gd — boss victory / run complete screen
+- res://Scripts/roadmap.gd — node selection + map layout
+- res://Scripts/animal_select.gd — starter choice + DevDock test tools
+- res://CLAUDE.md — project context for CC sessions
+
+## INSTALLED TOOLS
+
+- Godot 4.6.2 at C:\Godot
+- Claude Code with Godot MCP plugin
+- Godot plugins: Scene Manager, Signal Visualizer
+- Windows 10, user: Nicky
+
+## BALANCE NOTES
+
+- Bunny run: should feel fast/draw-heavy with new archetype
+- Turtle run: should feel tanky/survivable with new archetype
+- Dog run: should feel aggressive/damage-heavy with new archetype
+- Bear: hardest mob
+- Fox: easiest mob
+- Rest heal 15 HP: fair
+- Bandage Roll: fair
+- Iron Shield: fair (slightly weaker Bandage Roll)
+- Lucky Coin: good for shop gold
+- Baby Dragon 90 HP: challenging but beatable
+- Shop prices (10g adopt / 1g reroll / 3g remove): testing values

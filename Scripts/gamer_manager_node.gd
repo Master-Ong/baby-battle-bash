@@ -136,6 +136,7 @@ func load_mob_data():
 	mob_hp     = mob["hp"]
 	mob_max_hp = mob["hp"]
 	mob_damage = mob["damage"]
+	print("load_mob_data: ", mob_name, " HP set to ", mob_hp, "/", mob_max_hp)
 
 	# Save for next combat
 	GameState.last_mob_name = mob_name
@@ -146,6 +147,11 @@ func load_mob_data():
 # SECTION 8 — _ready()
 # =====================================================================
 func _ready():
+	mob_hp     = 0
+	mob_max_hp = 0
+	mob_name   = ""
+	mob_damage = 0
+
 	if GameState.player_hp > 0:
 		player_hp = GameState.player_hp
 	else:
@@ -153,6 +159,7 @@ func _ready():
 		GameState.player_hp = 50
 	_set_positions()
 	load_mob_data()
+	print("Mob initialized: ", mob_name, " HP: ", mob_hp, "/", mob_max_hp)
 	field_slots = {0: null, 1: null, 2: null}
 	spawn_field_visuals()
 	build_starting_deck()
@@ -208,7 +215,8 @@ func update_hud():
 	var relic_text = "Relics: " + ", ".join(GameState.relics) if GameState.relics.size() > 0 else "Relics: None"
 	root.get_node("CanvasLayer/HUDRoot/PlayerHUD/PlayerStatsVBox/RelicLabel").text    = relic_text
 	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobNameLabel").text        = mob_name
-	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobHPLabel").text          = "HP: " + str(mob_hp) + "/" + str(mob_max_hp)
+	var display_mob_hp = clampi(mob_hp, 0, mob_max_hp)
+	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobHPLabel").text          = "HP: " + str(display_mob_hp) + "/" + str(mob_max_hp)
 	root.get_node("CanvasLayer/HUDRoot/MobHUD/MobStatsVBox/MobATKLabel").text         = "ATK: " + str(mob_damage)
 	root.get_node("CanvasLayer/HUDRoot/BottomLeftHUD/DeckLabel").text                  = "Deck: " + str(deck.size())
 	root.get_node("CanvasLayer/HUDRoot/BottomRightHUD/GraveyardLabel").text            = "GY: " + str(graveyard.size())
