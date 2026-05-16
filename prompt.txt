@@ -1,68 +1,50 @@
 In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
 
-Read these files before making any changes:
+Read this file before making any changes:
 1. CLAUDE.md
-2. res://Scripts/GameState.gd
-3. res://Scripts/reward_screen.gd — read _ready(), _on_card_chosen(), and the gold_earned variable
+2. res://Scripts/animal_select.gd — read the full file
 
 ---
 
 GOAL:
-Add real persistent gold to GameState. Award gold on combat win.
-Display current gold on the reward screen. Smallest safe patch only.
+Add hover tooltips to all DevDock test card buttons using Godot's
+built-in tooltip_text property. Use the existing TEST_CARD_DATA "desc"
+field as the tooltip text. Smallest safe patch only.
 
-CHANGES — two files only:
+CHANGES — one file only: res://Scripts/animal_select.gd
 
-FILE 1: res://Scripts/GameState.gd
+In _ready(), after the starter button connections, add a loop that
+sets tooltip_text on every DevDock button:
 
-Add a new variable after is_boss_fight:
-    var gold: int = 0
+    # Set tooltips on dev card buttons
+    for container in _button_containers:
+        for child in container.get_children():
+            if child is Button and TEST_CARD_DATA.has(child.text):
+                child.tooltip_text = TEST_CARD_DATA[child.text]["desc"]
 
-In reset_run(), add:
-    gold = 0
+This automatically gives every button a tooltip matching its card
+description. No separate tooltip dictionary needed — TEST_CARD_DATA
+already has the data.
 
-FILE 2: res://Scripts/reward_screen.gd
-
-Change 1 — In _ready(), update the gold label to show current gold
-plus the amount being earned:
-
-Replace:
-    gold_label.text = "Gold: +" + str(gold_earned)
-
-With:
-    gold_label.text = "Gold: " + str(GameState.gold) + "  (+" + str(gold_earned) + ")"
-
-This shows something like "Gold: 20  (+10)" so the player sees
-their total AND what they're about to earn.
-
-Change 2 — In _on_card_chosen(), BEFORE the GameState.reward_cards
-append line, add:
-
-    GameState.gold += gold_earned
-    print("Gold earned: ", gold_earned, " | Total gold: ", GameState.gold)
-
-This awards gold exactly once per combat win — _on_card_chosen fires
-once then the scene changes, so there is no duplicate risk.
-
-Do NOT remove the existing gold_earned variable — it still defines
-how much gold this combat awards.
+Examples of what players will see on hover:
+- Pounce: "Deal 8 damage."
+- Dash: "Deal 4 damage. Draw 1 card."
+- Bunny: "ATK: 4 | HP: 12"
+- BIG: "All field animals gain +5 ATK and +5 HP."
 
 RULES:
-- Only edit GameState.gd and reward_screen.gd
+- Only edit animal_select.gd
+- Only add the tooltip loop in _ready()
 - Do not touch any other file
-- Do not change pick_rewards()
-- Do not change card pool definitions
-- Do not change how _on_card_chosen adds cards to reward_cards
-- Do not change nodes_completed logic
-- Do not change scene transition at the end of _on_card_chosen
-- Do not change combat, boss, win_combat, lose_combat
-- Do not change roadmap, animal select, main menu, lose screen
-- Do not create shop scene or shop script
+- Do not change button text, toggle_mode, or layout
+- Do not change TEST_CARD_DATA
+- Do not change _add_test_cards()
+- Do not change starter selection
+- Do not change scene file
 - Smallest safe patch only
 
 AFTER THE FIX, REPORT:
-1. Show the full updated GameState.gd
-2. Show the updated _ready() function from reward_screen.gd
-3. Show the updated _on_card_chosen() function from reward_screen.gd
-4. Confirm gold_earned variable is preserved
-5. Confirm no other files were touched
+1. Show the updated _ready() function
+2. Confirm tooltips use TEST_CARD_DATA["desc"]
+3. Confirm no other files were touched
+4. Confirm toggle behavior is unchanged

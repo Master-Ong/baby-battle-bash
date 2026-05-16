@@ -1,0 +1,195 @@
+# BABY BATTLE BASH — MASTER CONTEXT DOCUMENT
+Last Updated: 2026-05-15 (Session End)
+
+## PROJECT OVERVIEW
+Baby Battle Bash is a Slay the Spire-style roguelike deckbuilding card game built in Godot 4.6.2.
+Path: C:\Users\Nicky\Documents\baby-battle-bash
+Developer: Nicky (beginner solo dev, learning through real project reps)
+
+## CURRENT STATE — WHAT WORKS ✅
+
+**Core Loop:**
+- Full roguelike loop: Main Menu → Animal Select → Roadmap → Combat → Reward → Roadmap
+- Lose screen with New Run and Main Menu
+- Run Complete screen (after boss) with clean Main Menu return
+- GameState.reset_run() works cleanly between runs
+
+**Map 1 Content:**
+- 7 roadmap nodes: Combat, Rest, Combat, Combat, Shop, Chest, Boss
+- Rest Site heals 15 HP
+- Chest Site gives Bandage Roll relic
+- Bandage Roll gives 5 Block on turn 1
+- Boss node: Baby Dragon (90 HP, 16 ATK)
+
+**Gold System:**
+- GameState.gold starts at 0
+- Normal combat reward awards +10 gold
+- Gold accumulates during run
+- Gold resets on new run
+- Boss victory does not award gold
+
+**Shop System:**
+- Shop opens from roadmap
+- Market tab: 3 unique card offers (no visible duplicates)
+- Adopt costs 10g (testing price)
+- Reroll costs 1g per slot (testing price)
+- Purchased cards enter GameState.reward_cards
+- Return to Roadmap preserves run state
+
+**Fusion/Evolution v0:**
+- Training Camp button in Shop (bottom-left)
+- Opens overlay panel showing available fusions
+- Rules: 2 Bunny → Bunny+, 2 Turtle → Turtle+, 2 Dog → Dog+
+- Uses exact card_name matching (Bunny+ does NOT count as Bunny)
+- Removes 2 base cards, adds 1 upgraded card from CardDatabase
+- Panel refreshes after fusion
+- Free (no gold cost)
+- Only works on reward/shop/test-selector animals (NOT starter deck copies)
+- **STATUS: Code verified, needs gameplay testing**
+
+**Shared CardDatabase:**
+- res://Scripts/CardDatabase.gd
+- Static functions: get_animals(), get_colors(), get_adjectives(), get_attacks(), get_skills(), get_upgraded_animals()
+- Rewards and Shop both use shared definitions
+- Total pool: 3 animals, 3 colors, 6 adjectives, 5 attacks, 5 skills, 3 upgraded animals
+
+**Animal Select DevDock (Test Tools):**
+- Container-based layout at bottom (no clipping)
+- 3 rows: Animals, Adjectives, Verbs
+- 19 toggle buttons total
+- Tooltips show card descriptions on hover
+- Selected cards append to starter deck
+- Scene-tree-first design (editable in Godot editor)
+
+**Combat Systems:**
+- Combat end-state handling is stable (combat_ended guard, deferred outcome check)
+- Block system works (player_defense consumed before HP)
+- Field animals with 0 HP are removed to graveyard
+- Negative HP clamped to 0 for display
+- field_slots is the source of truth
+- Card HP mutation bug FIXED (cards cloned when building combat deck)
+
+**Card Pool:**
+- Animals: Bunny (4/12), Turtle (2/20), Dog (8/10)
+- Upgraded: Bunny+ (6/16), Turtle+ (4/28), Dog+ (12/14)
+- Colors: Blue (draw 1), Red (+2 ATK buff), Green (heal 3)
+- Adjectives: BIG, FAST, TOUGH, SHARP, SMART, MAGIC
+- Attacks: Strike, Scratch, Bite, Dash (4 dmg + draw 1), Pounce, Roar
+- Skills: Defend, Hide, Run Away, Block, Curl Up, Guard, Scout (1 block + draw 1), Sneak (4 block + draw 1)
+
+**Mob Pool:**
+- Early: Mr. Kiwi (40/8), Prickly Hedgehog (35/10)
+- Mid: Big Bear (80/12), Swift Fox (50/10), Sleepy Owl (55/9), Muddy Piglet (45/11)
+- Hard: Stone Turtle (90/14), Sneaky Raccoon (70/15)
+- Boss: Baby Dragon (90/16)
+- Tier-based randomization, no immediate repeats
+
+## CRITICAL BUG FIXES APPLIED
+
+1. **Win screen cleanup** — queue_free() added to prevent overlay persistence
+2. **Negative animal HP** — Clamped to max(animal_hp, 0) after mob damage
+3. **Card mutation bug** — build_starting_deck() now clones reward_cards entries instead of reusing objects
+4. **Combat end-state overlap** — combat_ended guard prevents victory/defeat double-triggers
+
+## DEFERRED FOR LATER
+
+- Color/adjective fusion
+- Fusing starter deck copies (they're created fresh each combat, not in reward_cards)
+- Blueprint stage names (Bunny → Rabbit → Fluffle)
+- Rarity system
+- Permanent collection/meta-progression
+- Map 2 expansion
+- More relics
+- UI/sprite/animation polish
+- Final JPG storybook map background
+
+## WORKFLOW RULES
+
+**ChatGPT → Claude.ai → Claude Code:**
+1. ChatGPT drafts feature ideas
+2. Claude.ai verifies against real project files
+3. Claude Code builds only after verification
+4. Never send raw ChatGPT prompts directly to CC
+
+**Patch discipline:**
+- Smallest safe patch only
+- One system at a time
+- Long prompts go through prompt.txt
+- Run CC with: `claude -p prompt.txt`
+
+**Testing before building:**
+- Always verify existing features work before expanding
+- Test Fusion v0 before building next feature
+- Screenshot validation when MCP disconnects
+
+## TECHNICAL WARNINGS
+
+- **Any full-screen Control node in combat scene MUST use MOUSE_FILTER_IGNORE**
+- **field_slots is the source of truth** — don't bypass it
+- **Combat end-state handling is fragile** — handle with care
+- **Cards in GameState.reward_cards must be cloned before combat use** — already fixed
+- **CanvasLayer overlays added to get_tree().root MUST call queue_free() before scene change**
+- **CombatScene root position must be (0, 0)** after adding background elements
+
+## BALANCE NOTES
+
+- Bunny run: hard
+- Turtle run: fair
+- Dog run: fair
+- Bear: hardest mob
+- Fox: easiest mob
+- Rest heal 15 HP: fair
+- Bandage Roll: fair
+- Baby Dragon 90 HP: challenging but beatable
+- Shop prices (10g/1g): testing values
+
+## KEY FILES
+
+- res://Scripts/gamer_manager_node.gd — main combat manager
+- res://Scripts/GameState.gd — persistent run state (autoload)
+- res://Scripts/CardDatabase.gd — shared card pool
+- res://Scripts/card_display.gd — card drag/drop and play logic
+- res://Scripts/Card.gd — card data structure
+- res://Scripts/reward_screen.gd — post-combat rewards
+- res://Scripts/shop.gd — shop Market, reroll, Training Camp fusion
+- res://Scripts/lose_screen.gd — defeat screen
+- res://Scripts/win_screen.gd — boss victory / run complete screen
+- res://Scripts/roadmap.gd — node selection + map layout
+- res://Scripts/animal_select.gd — starter choice + DevDock test tools
+- res://CLAUDE.md — project context for CC sessions
+
+## NEXT PRIORITY TASKS
+
+**IMMEDIATE (must test first):**
+1. **Test Fusion v0** — verify Training Camp works in actual gameplay
+   - Use DevDock to inject 2x Bunny
+   - Go to Shop → Training Camp
+   - Fuse → verify Bunny+ appears with correct HP in combat
+   - Test all 3 fusions (Bunny, Turtle, Dog)
+
+**AFTER FUSION TESTS PASS:**
+2. **More relics** — add strategic variety (Lucky Coin, Iron Shield, etc.)
+3. **Map 2 expansion** — more nodes, longer runs
+4. **Color card expansion** — more passive playstyle identity
+
+## INSTALLED TOOLS
+
+- Godot 4.6.2 at C:\Godot
+- Claude Code v2.1.98 with Godot MCP plugin
+- Godot plugins: Scene Manager, Signal Visualizer
+- Windows 10, user: Nicky
+
+## TEACHING NOTES FOR NICKY
+
+Nicky learns best through:
+- Plain English, low-jargon explanations
+- Step-by-step with specific guidance
+- Real project examples, not abstract theory
+- "What happened, what was expected, what's wrong, which file, how to test"
+
+Project philosophy:
+- **Gameplay and content first** — UI/sprites/polish come last
+- **Never send raw ChatGPT prompts to CC** — always verify first
+- **Smallest safe patch only** — one system at a time
+- **Full-screen Control nodes need MOUSE_FILTER_IGNORE**
+- **field_slots is the source of truth**

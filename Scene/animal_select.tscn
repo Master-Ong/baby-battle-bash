@@ -1,33 +1,34 @@
 [gd_scene format=3 uid="uid://dq7v2w50an1mx"]
 
-[ext_resource type="Script" uid="uid://bf3p8r6t4k0hj" path="res://Scripts/animal_select.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://3v7ny64hc6l5" path="res://Scripts/animal_select.gd" id="1_script"]
 
-[node name="AnimalSelect" type="Node"]
+[node name="AnimalSelect" type="Node" unique_id=297591040]
 script = ExtResource("1_script")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1423003147]
 
-[node name="Background" type="ColorRect" parent="CanvasLayer"]
+[node name="Background" type="ColorRect" parent="CanvasLayer" unique_id=251764897]
 offset_right = 1152.0
 offset_bottom = 648.0
 color = Color(0.1, 0.15, 0.1, 1)
 
-[node name="TitleLabel" type="Label" parent="CanvasLayer"]
-offset_left = 276.0
-offset_top = 60.0
-offset_right = 876.0
-offset_bottom = 130.0
+[node name="TitleLabel" type="Label" parent="CanvasLayer" unique_id=1157340883]
+offset_left = 290.0
+offset_top = 31.0
+offset_right = 890.0
+offset_bottom = 101.0
 theme_override_font_sizes/font_size = 36
 text = "Choose Your Starter"
 horizontal_alignment = 1
 
-[node name="BunnyPanel" type="Panel" parent="CanvasLayer"]
-offset_left = 76.0
-offset_top = 160.0
-offset_right = 376.0
-offset_bottom = 480.0
+[node name="BunnyPanel" type="Panel" parent="CanvasLayer" unique_id=594510999]
+offset_left = 86.0
+offset_top = 130.0
+offset_right = 386.0
+offset_bottom = 450.0
 
-[node name="BunnyNameLabel" type="Label" parent="CanvasLayer/BunnyPanel"]
+[node name="BunnyNameLabel" type="Label" parent="CanvasLayer/BunnyPanel" unique_id=919623758]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 20.0
 offset_right = 290.0
@@ -36,7 +37,8 @@ theme_override_font_sizes/font_size = 28
 text = "Bunny"
 horizontal_alignment = 1
 
-[node name="BunnyTypeLabel" type="Label" parent="CanvasLayer/BunnyPanel"]
+[node name="BunnyTypeLabel" type="Label" parent="CanvasLayer/BunnyPanel" unique_id=637809636]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 70.0
 offset_right = 290.0
@@ -45,17 +47,21 @@ theme_override_font_sizes/font_size = 20
 text = "Speed"
 horizontal_alignment = 1
 
-[node name="BunnyDescLabel" type="Label" parent="CanvasLayer/BunnyPanel"]
+[node name="BunnyDescLabel" type="Label" parent="CanvasLayer/BunnyPanel" unique_id=346429531]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 110.0
 offset_right = 290.0
 offset_bottom = 230.0
 theme_override_font_sizes/font_size = 16
-text = "Fast and nimble.\nFocuses on drawing cards\nand quick attacks."
+text = "Fast and nimble.
+Focuses on drawing cards
+and quick attacks."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BunnyButton" type="Button" parent="CanvasLayer/BunnyPanel"]
+[node name="BunnyButton" type="Button" parent="CanvasLayer/BunnyPanel" unique_id=40002425]
+layout_mode = 0
 offset_left = 50.0
 offset_top = 245.0
 offset_right = 250.0
@@ -63,13 +69,14 @@ offset_bottom = 290.0
 theme_override_font_sizes/font_size = 20
 text = "Choose"
 
-[node name="TurtlePanel" type="Panel" parent="CanvasLayer"]
-offset_left = 426.0
-offset_top = 160.0
-offset_right = 726.0
-offset_bottom = 480.0
+[node name="TurtlePanel" type="Panel" parent="CanvasLayer" unique_id=1125772384]
+offset_left = 436.0
+offset_top = 130.0
+offset_right = 736.0
+offset_bottom = 450.0
 
-[node name="TurtleNameLabel" type="Label" parent="CanvasLayer/TurtlePanel"]
+[node name="TurtleNameLabel" type="Label" parent="CanvasLayer/TurtlePanel" unique_id=1773249153]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 20.0
 offset_right = 290.0
@@ -78,7 +85,8 @@ theme_override_font_sizes/font_size = 28
 text = "Turtle"
 horizontal_alignment = 1
 
-[node name="TurtleTypeLabel" type="Label" parent="CanvasLayer/TurtlePanel"]
+[node name="TurtleTypeLabel" type="Label" parent="CanvasLayer/TurtlePanel" unique_id=799229248]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 70.0
 offset_right = 290.0
@@ -87,17 +95,21 @@ theme_override_font_sizes/font_size = 20
 text = "Defense"
 horizontal_alignment = 1
 
-[node name="TurtleDescLabel" type="Label" parent="CanvasLayer/TurtlePanel"]
+[node name="TurtleDescLabel" type="Label" parent="CanvasLayer/TurtlePanel" unique_id=359114893]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 110.0
 offset_right = 290.0
 offset_bottom = 230.0
 theme_override_font_sizes/font_size = 16
-text = "Tough and steady.\nFocuses on blocking\nand outlasting foes."
+text = "Tough and steady.
+Focuses on blocking
+and outlasting foes."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="TurtleButton" type="Button" parent="CanvasLayer/TurtlePanel"]
+[node name="TurtleButton" type="Button" parent="CanvasLayer/TurtlePanel" unique_id=2015219157]
+layout_mode = 0
 offset_left = 50.0
 offset_top = 245.0
 offset_right = 250.0
@@ -105,13 +117,14 @@ offset_bottom = 290.0
 theme_override_font_sizes/font_size = 20
 text = "Choose"
 
-[node name="DogPanel" type="Panel" parent="CanvasLayer"]
-offset_left = 776.0
-offset_top = 160.0
-offset_right = 1076.0
-offset_bottom = 480.0
+[node name="DogPanel" type="Panel" parent="CanvasLayer" unique_id=435932093]
+offset_left = 786.0
+offset_top = 130.0
+offset_right = 1086.0
+offset_bottom = 450.0
 
-[node name="DogNameLabel" type="Label" parent="CanvasLayer/DogPanel"]
+[node name="DogNameLabel" type="Label" parent="CanvasLayer/DogPanel" unique_id=2017282237]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 20.0
 offset_right = 290.0
@@ -120,7 +133,8 @@ theme_override_font_sizes/font_size = 28
 text = "Dog"
 horizontal_alignment = 1
 
-[node name="DogTypeLabel" type="Label" parent="CanvasLayer/DogPanel"]
+[node name="DogTypeLabel" type="Label" parent="CanvasLayer/DogPanel" unique_id=2004384867]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 70.0
 offset_right = 290.0
@@ -129,17 +143,21 @@ theme_override_font_sizes/font_size = 20
 text = "Power"
 horizontal_alignment = 1
 
-[node name="DogDescLabel" type="Label" parent="CanvasLayer/DogPanel"]
+[node name="DogDescLabel" type="Label" parent="CanvasLayer/DogPanel" unique_id=911714479]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 110.0
 offset_right = 290.0
 offset_bottom = 230.0
 theme_override_font_sizes/font_size = 16
-text = "Strong and fierce.\nFocuses on heavy\ndamage and dominance."
+text = "Strong and fierce.
+Focuses on heavy
+damage and dominance."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="DogButton" type="Button" parent="CanvasLayer/DogPanel"]
+[node name="DogButton" type="Button" parent="CanvasLayer/DogPanel" unique_id=1312252945]
+layout_mode = 0
 offset_left = 50.0
 offset_top = 245.0
 offset_right = 250.0
@@ -147,101 +165,206 @@ offset_bottom = 290.0
 theme_override_font_sizes/font_size = 20
 text = "Choose"
 
-[node name="TestCardsLabel" type="Label" parent="CanvasLayer"]
-offset_left = 276.0
-offset_top = 500.0
-offset_right = 876.0
-offset_bottom = 525.0
-theme_override_font_sizes/font_size = 16
-text = "TEST CARDS (toggle on/off)"
+[node name="DevDock" type="PanelContainer" parent="CanvasLayer" unique_id=1572745372]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 218.0
+offset_top = -158.0
+offset_right = -212.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/DevDock" unique_id=933223264]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/DevDock/Margin" unique_id=954876007]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="Label" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=1671609615]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "🛠️ DEV TOOLS: Test Card Injection Toggles"
 horizontal_alignment = 1
 
-[node name="TestBIG" type="Button" parent="CanvasLayer"]
-offset_left = 166.0
-offset_top = 540.0
-offset_right = 286.0
-offset_bottom = 580.0
-theme_override_font_sizes/font_size = 14
+[node name="AnimalsRow" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=439895420]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RowLabel" type="Label" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow" unique_id=1855929611]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🐾 Animals:"
+
+[node name="AnimalsButtons" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow" unique_id=2027643675]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnBunny" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons" unique_id=107792923]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Bunny"
+
+[node name="BtnTurtle" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons" unique_id=86182144]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Turtle"
+
+[node name="BtnDog" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons" unique_id=1861619382]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Dog"
+
+[node name="BtnBunnyPlus" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons" unique_id=1210274412]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Bunny+"
+
+[node name="BtnTurtlePlus" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons" unique_id=1727419074]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Turtle+"
+
+[node name="BtnDogPlus" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons" unique_id=1563776566]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Dog+"
+
+[node name="AdjRow" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=1725410872]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RowLabel" type="Label" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow" unique_id=818267849]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "✨ Adjectives:"
+
+[node name="AdjectivesButtons" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow" unique_id=1868449235]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnBIG" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons" unique_id=590017646]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "BIG"
 
-[node name="TestFAST" type="Button" parent="CanvasLayer"]
-offset_left = 306.0
-offset_top = 540.0
-offset_right = 426.0
-offset_bottom = 580.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnFAST" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons" unique_id=1071955225]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "FAST"
 
-[node name="TestTOUGH" type="Button" parent="CanvasLayer"]
-offset_left = 446.0
-offset_top = 540.0
-offset_right = 566.0
-offset_bottom = 580.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnTOUGH" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons" unique_id=1132648971]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "TOUGH"
 
-[node name="TestSHARP" type="Button" parent="CanvasLayer"]
-offset_left = 586.0
-offset_top = 540.0
-offset_right = 706.0
-offset_bottom = 580.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnSHARP" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons" unique_id=118029715]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "SHARP"
 
-[node name="TestSMART" type="Button" parent="CanvasLayer"]
-offset_left = 726.0
-offset_top = 540.0
-offset_right = 846.0
-offset_bottom = 580.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnSMART" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons" unique_id=142957339]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "SMART"
 
-[node name="TestMAGIC" type="Button" parent="CanvasLayer"]
-offset_left = 866.0
-offset_top = 540.0
-offset_right = 986.0
-offset_bottom = 580.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnMAGIC" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons" unique_id=460715760]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "MAGIC"
 
-[node name="TestPounce" type="Button" parent="CanvasLayer"]
-offset_left = 306.0
-offset_top = 595.0
-offset_right = 426.0
-offset_bottom = 635.0
-theme_override_font_sizes/font_size = 14
+[node name="VerbRow" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=1709034683]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RowLabel" type="Label" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow" unique_id=1715414668]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🎬 Verbs:"
+
+[node name="VerbsButtons" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow" unique_id=1093552455]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnPounce" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=66999929]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "Pounce"
 
-[node name="TestRoar" type="Button" parent="CanvasLayer"]
-offset_left = 446.0
-offset_top = 595.0
-offset_right = 566.0
-offset_bottom = 635.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnRoar" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=1311075038]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "Roar"
 
-[node name="TestCurlUp" type="Button" parent="CanvasLayer"]
-offset_left = 586.0
-offset_top = 595.0
-offset_right = 706.0
-offset_bottom = 635.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnCurlUp" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=1567481488]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "Curl Up"
 
-[node name="TestGuard" type="Button" parent="CanvasLayer"]
-offset_left = 726.0
-offset_top = 595.0
-offset_right = 846.0
-offset_bottom = 635.0
-theme_override_font_sizes/font_size = 14
+[node name="BtnGuard" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=1601780723]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "Guard"
+
+[node name="BtnDash" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=1223255497]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Dash"
+
+[node name="BtnScout" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=1972962821]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Scout"
+
+[node name="BtnSneak" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons" unique_id=1763735342]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Sneak"

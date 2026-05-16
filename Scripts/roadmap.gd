@@ -5,8 +5,8 @@
 # ------------------------------------------------------------------
 extends Control
 
-const NODE_TYPES  = ["Combat", "Rest",   "Combat",  "Combat",  "Chest",  "Boss"]
-const NODE_LABELS = ["Fight 1", "Rest",  "Fight 2", "Fight 3", "Chest",  "Boss"]
+const NODE_TYPES  = ["Combat", "Rest",   "Combat",  "Combat",  "Shop",   "Chest",  "Boss"]
+const NODE_LABELS = ["Fight 1", "Rest",  "Fight 2", "Fight 3", "Shop",   "Chest",  "Boss"]
 
 # Any one completed prereq unlocks the node.
 const UNLOCK_AFTER = {
@@ -14,8 +14,9 @@ const UNLOCK_AFTER = {
 	1: [0],
 	2: [0],
 	3: [1, 2],
-	4: [3],
-	5: [4],
+	4: [3],      # Shop unlocks after Fight 3
+	5: [4],      # Chest unlocks after Shop
+	6: [5],      # Boss unlocks after Chest
 }
 
 # Button center positions in 1152x648 space, bottom-to-top.
@@ -24,8 +25,9 @@ const NODE_POSITIONS = [
 	Vector2(288, 400),   # 1 Rest    — left
 	Vector2(864, 400),   # 2 Fight 2 — right
 	Vector2(576, 270),   # 3 Fight 3 — center
-	Vector2(576, 160),   # 4 Chest   — center above Fight 3
-	Vector2(576, 70),    # 5 Boss    — top center
+	Vector2(300, 180),   # 4 Shop    — left of center
+	Vector2(850, 180),   # 5 Chest   — right of center
+	Vector2(576, 70),    # 6 Boss    — top center
 ]
 
 # Lines to draw between node indices.
@@ -34,8 +36,10 @@ const CONNECTIONS = [
 	[0, 2],
 	[1, 3],
 	[2, 3],
-	[3, 4],
-	[4, 5],
+	[3, 4],      # Fight 3 → Shop
+	[3, 5],      # Fight 3 → Chest
+	[4, 6],      # Shop → Boss
+	[5, 6],      # Chest → Boss
 ]
 
 var _node_buttons: Array = []
@@ -104,6 +108,7 @@ func _base_type_color(node_idx: int) -> Color:
 		"Combat": return Color(0.35, 0.1, 0.1, 1)
 		"Rest":   return Color(0.1, 0.25, 0.1, 1)
 		"Chest":  return Color(0.3, 0.25, 0.05, 1)
+		"Shop":   return Color(0.15, 0.2, 0.25, 1)
 		"Boss":   return Color(0.25, 0.05, 0.3, 1)
 		_:        return Color(0.2, 0.2, 0.2, 1)
 
@@ -137,6 +142,8 @@ func _on_node_pressed(node_idx: int) -> void:
 			get_tree().change_scene_to_file("res://Scene/combat_scene.tscn")
 		"Rest":
 			get_tree().change_scene_to_file("res://Scene/rest_site.tscn")
+		"Shop":
+			get_tree().change_scene_to_file("res://Scene/shop_scene.tscn")
 		"Chest":
 			get_tree().change_scene_to_file("res://Scene/chest_site.tscn")
 		"Boss":

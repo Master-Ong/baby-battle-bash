@@ -228,7 +228,18 @@ func build_starting_deck():
 		_:
 			_build_bunny_deck()
 	for card in GameState.reward_cards:
-		deck.append(card)
+		var clone = CardClass.new()
+		clone.card_name        = card.card_name
+		clone.card_type        = card.card_type
+		clone.energy_cost      = card.energy_cost
+		clone.effect_value     = card.effect_value
+		clone.card_description = card.card_description
+		clone.card_art         = card.card_art
+		clone.animal_hp        = card.animal_hp
+		clone.animal_atk       = card.animal_atk
+		clone.animal_defense   = card.animal_defense
+		clone.is_on_field      = false
+		deck.append(clone)
 	if GameState.reward_cards.size() > 0:
 		print("Added ", GameState.reward_cards.size(), " reward cards to deck.")
 
@@ -544,6 +555,8 @@ func play_attack_card(card, card_visual):
 	hand.erase(card)
 	hand_visuals.erase(card_visual)
 	card_visual.queue_free()
+	if card.card_name == "Dash":
+		draw_cards(1)
 	update_hud()
 	check_combat_outcome()
 
@@ -560,6 +573,16 @@ func play_skill_card(card, card_visual):
 	card_visual.queue_free()
 	if card.card_name == "Run Away":
 		draw_cards(1)
+		update_hud()
+	elif card.card_name == "Scout":
+		player_defense += card.effect_value
+		draw_cards(1)
+		print("Gained ", card.effect_value, " block and drew 1 card")
+		update_hud()
+	elif card.card_name == "Sneak":
+		player_defense += card.effect_value
+		draw_cards(1)
+		print("Gained ", card.effect_value, " block and drew 1 card")
 		update_hud()
 	else:
 		player_defense += card.effect_value

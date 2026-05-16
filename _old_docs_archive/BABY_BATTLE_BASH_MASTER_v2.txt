@@ -1,0 +1,119 @@
+# BABY BATTLE BASH — MASTER CONTEXT DOCUMENT
+Last Updated: 2026-05-13
+
+## PROJECT OVERVIEW
+Baby Battle Bash is a Slay the Spire-style roguelike deckbuilding card game built in Godot 4.6.2.
+Path: C:\Users\Nicky\Documents\baby-battle-bash
+Developer: Nicky (beginner solo dev, learning through real project reps)
+
+## CURRENT STATE — WHAT WORKS
+- Full roguelike loop: Main Menu → Animal Select → Roadmap → Combat → Reward → Roadmap
+- Lose screen supports New Run and Main Menu
+- GameState.reset_run() works cleanly between runs
+- Roadmap has 6 nodes: Combat, Rest, Combat, Combat, Chest, Boss
+- Rest Site heals 15 HP
+- Chest Site gives Bandage Roll relic
+- Bandage Roll gives 5 Block on turn 1
+- Boss node works — Baby Dragon (90 HP, 16 ATK)
+- Run Complete screen works with clean Main Menu return
+- Combat end-state handling is stable:
+  - combat_ended guard prevents double screens
+  - Defeat wins ties (deferred outcome check)
+  - check_combat_outcome() called after player attacks and at end of resolve_combat()
+- Block cards work correctly (player_defense consumed before HP)
+- Card drag-and-drop to field slots works
+- Visual background in combat scene (safe with MOUSE_FILTER_IGNORE)
+- Negative field animal HP clamped to 0
+- Test card selector on Animal Select screen (6 adjective toggles)
+
+## CARD POOL
+Animals: Bunny, Turtle, Dog
+Colors: Blue (draw 1), Red (+2 ATK buff), Green (heal 3)
+Adjectives v1: BIG, FAST, TOUGH
+Adjectives v2: SHARP, SMART, MAGIC
+Attack cards: Strike (6 dmg), Pounce (8 dmg), Roar (14 dmg, 2 energy), Scratch, Bite, Dash
+Skill cards: Defend (5 block), Hide (5 block), Block (8 block), Curl Up (8 block), Guard (15 block, 2 energy), Run Away (draw 1)
+
+## MOB POOL
+Early tier (encounter 1-2): Mr. Kiwi (40 HP, 8 ATK), Prickly Hedgehog (35 HP, 10 ATK)
+Mid tier (encounter 3): Big Bear (80 HP, 12 ATK), Swift Fox (50 HP, 10 ATK), Sleepy Owl (55 HP, 9 ATK), Muddy Piglet (45 HP, 11 ATK)
+Hard tier (wildcard): Stone Turtle (90 HP, 14 ATK), Sneaky Raccoon (70 HP, 15 ATK)
+Boss (encounter 4): Baby Dragon (90 HP, 16 ATK)
+- Mobs randomize within tiers
+- Last fought mob does not repeat in next fight
+
+## GOLD SYSTEM (IN PROGRESS)
+- Gold is currently display-only (gold_earned = 10 hardcoded on reward screen)
+- Gold is NOT yet stored in GameState
+- Prompt ready to add real gold: prompt_gold_system.txt (not yet applied)
+
+## WHAT TO DO NEXT SESSION
+1. Apply prompt_gold_system.txt to CC (adds gold to GameState, awards on combat win)
+2. Test gold accumulation across combats
+3. After gold works, build Shop v1 (Patch 2 of 3):
+   - Add Shop node to roadmap
+   - Create shop scene with 3 card slots and buy logic
+   - Extract shared card pool from reward_screen.gd
+4. After shop works, add Reroll + Upgrade tab placeholder (Patch 3 of 3)
+
+## PRIORITY ORDER (GAMEPLAY-FIRST)
+1. ~~Fix overlap bug~~ ✅
+2. ~~Fix simultaneous death outcome~~ ✅
+3. ~~Fix immediate victory~~ ✅
+4. ~~Expand adjective cards~~ ✅
+5. ~~Expand attack/skill cards~~ ✅
+6. ~~More mobs + randomization~~ ✅
+7. ~~Boss milestone (Baby Dragon + Run Complete)~~ ✅
+8. ~~Fix negative HP display~~ ✅
+9. ~~Fix win screen cleanup~~ ✅
+10. Gold system foundation ← NEXT (prompt ready)
+11. Shop v1
+12. Fusion system
+13. UI/sprite polish (LAST)
+
+## WORKFLOW RULES
+- ChatGPT drafts → Claude.ai verifies against real files → Claude Code builds
+- Never send raw ChatGPT prompts directly to CC
+- Smallest safe patch only
+- One system at a time
+- Long prompts go through prompt.txt
+- Run CC with: claude -p prompt.txt
+
+## TECHNICAL WARNINGS
+- Any full-screen Control node in combat scene MUST use MOUSE_FILTER_IGNORE
+- field_slots is the source of truth
+- Be careful with combat end-state handling
+- Do not touch unrelated systems
+- Do not mix gameplay refactors with UI cleanup
+- Always check CombatScene root position = (0, 0) after adding background elements
+- CanvasLayer overlays added to get_tree().root must call queue_free() before scene change
+
+## BALANCE NOTES
+- Bunny run: hard
+- Turtle run: fair
+- Dog run: fair
+- Bear: hardest mob
+- Fox: easiest mob
+- Rest heal 15 HP: feels fair
+- Bandage Roll: feels fair
+- Baby Dragon at 90 HP: challenging but beatable
+
+## FILE STRUCTURE (KEY SCRIPTS)
+- res://Scripts/gamer_manager_node.gd — main combat manager
+- res://Scripts/GameState.gd — persistent run state (autoload)
+- res://Scripts/card_display.gd — card drag/drop and play logic
+- res://Scripts/Card.gd — card data structure
+- res://Scripts/reward_screen.gd — post-combat rewards + card pool definitions
+- res://Scripts/lose_screen.gd — defeat screen
+- res://Scripts/win_screen.gd — boss victory / run complete screen
+- res://Scripts/roadmap.gd — node selection + map layout
+- res://Scripts/rest_site.gd — healing encounter
+- res://Scripts/chest_site.gd — relic reward
+- res://Scripts/animal_select.gd — starter choice + test card selector
+- res://CLAUDE.md — project context for CC sessions
+
+## INSTALLED TOOLS
+- Godot 4.6.2 at C:\Godot
+- Claude Code with Godot MCP plugin
+- Installed Godot plugins: Scene Manager, Signal Visualizer
+- Windows 10, user: Nicky
