@@ -9,6 +9,12 @@ const TEST_CARD_DATA = {
 	"Bunny+":  {"type": "ANIMAL",    "cost": 0, "value": 0,  "desc": "ATK: 6 | HP: 16",  "hp": 16, "atk": 6,  "def": 3},
 	"Turtle+": {"type": "ANIMAL",    "cost": 0, "value": 0,  "desc": "ATK: 4 | HP: 28",  "hp": 28, "atk": 4,  "def": 7},
 	"Dog+":    {"type": "ANIMAL",    "cost": 0, "value": 0,  "desc": "ATK: 12 | HP: 14", "hp": 14, "atk": 12, "def": 2},
+	"Blue":    {"type": "COLOR",     "cost": 1, "value": 1,  "desc": "Draw 1 card."},
+	"Red":     {"type": "COLOR",     "cost": 1, "value": 2,  "desc": "Buff field animals +2 ATK"},
+	"Green":   {"type": "COLOR",     "cost": 1, "value": 3,  "desc": "Heal 3 HP."},
+	"Yellow":  {"type": "COLOR",     "cost": 1, "value": 1,  "desc": "Gain 1 energy this turn."},
+	"Purple":  {"type": "COLOR",     "cost": 1, "value": 6,  "desc": "Gain 6 Block."},
+	"White":   {"type": "COLOR",     "cost": 1, "value": 2,  "desc": "All field animals gain +2 ATK and +4 HP."},
 	"BIG":     {"type": "ADJECTIVE", "cost": 1, "value": 5,  "desc": "All field animals gain +5 ATK and +5 HP."},
 	"FAST":    {"type": "ADJECTIVE", "cost": 1, "value": 3,  "desc": "All field animals gain +3 ATK."},
 	"TOUGH":   {"type": "ADJECTIVE", "cost": 1, "value": 6,  "desc": "All field animals gain +6 HP."},
@@ -29,13 +35,22 @@ const TYPE_MAP = {
 	"ADJECTIVE": CardClass.CardType.ADJECTIVE,
 	"ATTACK":    CardClass.CardType.ATTACK,
 	"SKILL":     CardClass.CardType.SKILL,
+	"COLOR":     CardClass.CardType.COLOR,
+}
+
+const RELIC_DATA = {
+	"Bandage Roll": "Start each combat with 5 Block.",
+	"Iron Shield":  "Start each combat with 3 Block.",
+	"Lucky Coin":   "Gain +5 extra gold after normal combat.",
 }
 
 @onready var _button_containers: Array = [
 	$CanvasLayer/DevDock/Margin/VBox/AnimalsRow/AnimalsButtons,
 	$CanvasLayer/DevDock/Margin/VBox/AdjRow/AdjectivesButtons,
+	$CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons,
 	$CanvasLayer/DevDock/Margin/VBox/VerbRow/VerbsButtons,
 ]
+@onready var _relic_buttons = $CanvasLayer/DevDock/Margin/VBox/RelicsRow/RelicsButtons
 
 
 func _ready():
@@ -46,23 +61,29 @@ func _ready():
 		for child in container.get_children():
 			if child is Button and TEST_CARD_DATA.has(child.text):
 				child.tooltip_text = TEST_CARD_DATA[child.text]["desc"]
+	for child in _relic_buttons.get_children():
+		if child is Button and RELIC_DATA.has(child.text):
+			child.tooltip_text = RELIC_DATA[child.text]
 
 
 func _on_bunny_pressed():
 	GameState.selected_starter = "Bunny"
 	_add_test_cards()
+	_add_test_relics()
 	get_tree().change_scene_to_file("res://Scene/roadmap.tscn")
 
 
 func _on_turtle_pressed():
 	GameState.selected_starter = "Turtle"
 	_add_test_cards()
+	_add_test_relics()
 	get_tree().change_scene_to_file("res://Scene/roadmap.tscn")
 
 
 func _on_dog_pressed():
 	GameState.selected_starter = "Dog"
 	_add_test_cards()
+	_add_test_relics()
 	get_tree().change_scene_to_file("res://Scene/roadmap.tscn")
 
 
@@ -96,3 +117,19 @@ func _add_test_cards():
 			card.animal_defense = info["def"]
 		GameState.reward_cards.append(card)
 		print("Test card added: ", card_name)
+
+
+func _get_selected_dev_relics() -> Array:
+	var selected: Array = []
+	for child in _relic_buttons.get_children():
+		if child is Button and child.button_pressed:
+			selected.append(child.text)
+	return selected
+
+
+func _add_test_relics():
+	var selected = _get_selected_dev_relics()
+	for relic_name in selected:
+		if not GameState.relics.has(relic_name):
+			GameState.relics.append(relic_name)
+			print("Test relic added: ", relic_name)

@@ -120,7 +120,17 @@ Developer: Nicky (beginner solo dev, learning through real project reps)
 **Testing before building:**
 - Always verify existing features work before expanding
 - Test Fusion v0 before building next feature
-- Screenshot validation when MCP disconnects
+
+**Screenshot validation (required when MCP disconnects):**
+The Godot MCP connection is unstable and drops frequently. When it disconnects:
+1. Send prompt to Claude Code
+2. CC builds the changes
+3. **Nicky takes a screenshot of the result in Godot**
+4. **Nicky pastes the screenshot in Claude.ai chat**
+5. Claude verifies the result visually
+6. Then proceed to next task
+
+This lets us confirm changes worked ("DevDock buttons appeared", "Training Camp panel opened") without needing live file access.
 
 ## TECHNICAL WARNINGS
 

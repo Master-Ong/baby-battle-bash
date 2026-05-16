@@ -245,93 +245,159 @@ func build_starting_deck():
 
 
 func _build_bunny_deck():
-	for i in 10:
-		var strike = CardClass.new()
-		strike.card_name = "Strike"
-		strike.card_type = CardClass.CardType.ATTACK
-		strike.energy_cost = 1
-		strike.effect_value = 6
-		strike.card_description = "Deal 6 damage."
-		deck.append(strike)
-	for i in 4:
-		var defend = CardClass.new()
-		defend.card_name = "Defend"
-		defend.card_type = CardClass.CardType.SKILL
-		defend.energy_cost = 1
-		defend.effect_value = 5
-		defend.card_description = "Gain 5 Block."
-		deck.append(defend)
 	for i in 3:
-		var bunny = CardClass.new()
-		bunny.card_name = "Bunny"
-		bunny.card_type = CardClass.CardType.ANIMAL
-		bunny.energy_cost = 0
-		bunny.animal_hp = 12
-		bunny.animal_atk = 4
-		bunny.animal_defense = 2
-		bunny.card_description = "ATK: 4 | HP: 12"
-		deck.append(bunny)
-	print("Deck built: Bunny starter")
+		var card = CardClass.new()
+		card.card_name = "Bunny"
+		card.card_type = CardClass.CardType.ANIMAL
+		card.energy_cost = 0
+		card.animal_hp = 12
+		card.animal_atk = 4
+		card.animal_defense = 2
+		card.card_description = "ATK: 4 | HP: 12"
+		deck.append(card)
+	for i in 3:
+		var card = CardClass.new()
+		card.card_name = "Strike"
+		card.card_type = CardClass.CardType.ATTACK
+		card.energy_cost = 1
+		card.effect_value = 6
+		card.card_description = "Deal 6 damage."
+		deck.append(card)
+	for i in 2:
+		var card = CardClass.new()
+		card.card_name = "Defend"
+		card.card_type = CardClass.CardType.SKILL
+		card.energy_cost = 1
+		card.effect_value = 5
+		card.card_description = "Gain 5 Block."
+		deck.append(card)
+	for i in 2:
+		var card = CardClass.new()
+		card.card_name = "Dash"
+		card.card_type = CardClass.CardType.ATTACK
+		card.energy_cost = 1
+		card.effect_value = 4
+		card.card_description = "Deal 4 damage. Draw 1 card."
+		deck.append(card)
+	var scout = CardClass.new()
+	scout.card_name = "Scout"
+	scout.card_type = CardClass.CardType.SKILL
+	scout.energy_cost = 1
+	scout.effect_value = 1
+	scout.card_description = "Gain 1 Block. Draw 1 card."
+	deck.append(scout)
+	var blue = CardClass.new()
+	blue.card_name = "Blue"
+	blue.card_type = CardClass.CardType.COLOR
+	blue.energy_cost = 1
+	blue.effect_value = 1
+	blue.card_description = "Draw 1 card."
+	deck.append(blue)
+	print("Deck built: Bunny starter (12 cards — Speed/Draw/Tempo)")
 
 
 func _build_turtle_deck():
-	for i in 10:
-		var strike = CardClass.new()
-		strike.card_name = "Strike"
-		strike.card_type = CardClass.CardType.ATTACK
-		strike.energy_cost = 1
-		strike.effect_value = 6
-		strike.card_description = "Deal 6 damage."
-		deck.append(strike)
-	for i in 4:
-		var defend = CardClass.new()
-		defend.card_name = "Defend"
-		defend.card_type = CardClass.CardType.SKILL
-		defend.energy_cost = 1
-		defend.effect_value = 5
-		defend.card_description = "Gain 5 Block."
-		deck.append(defend)
 	for i in 3:
-		var turtle = CardClass.new()
-		turtle.card_name = "Turtle"
-		turtle.card_type = CardClass.CardType.ANIMAL
-		turtle.energy_cost = 0
-		turtle.animal_hp = 20
-		turtle.animal_atk = 2
-		turtle.animal_defense = 5
-		turtle.card_description = "ATK: 2 | HP: 20"
-		deck.append(turtle)
-	print("Deck built: Turtle starter")
+		var card = CardClass.new()
+		card.card_name = "Turtle"
+		card.card_type = CardClass.CardType.ANIMAL
+		card.energy_cost = 0
+		card.animal_hp = 20
+		card.animal_atk = 2
+		card.animal_defense = 5
+		card.card_description = "ATK: 2 | HP: 20"
+		deck.append(card)
+	for i in 3:
+		var card = CardClass.new()
+		card.card_name = "Strike"
+		card.card_type = CardClass.CardType.ATTACK
+		card.energy_cost = 1
+		card.effect_value = 6
+		card.card_description = "Deal 6 damage."
+		deck.append(card)
+	for i in 2:
+		var card = CardClass.new()
+		card.card_name = "Defend"
+		card.card_type = CardClass.CardType.SKILL
+		card.energy_cost = 1
+		card.effect_value = 5
+		card.card_description = "Gain 5 Block."
+		deck.append(card)
+	for i in 2:
+		var card = CardClass.new()
+		card.card_name = "Curl Up"
+		card.card_type = CardClass.CardType.SKILL
+		card.energy_cost = 1
+		card.effect_value = 8
+		card.card_description = "Gain 8 Block."
+		deck.append(card)
+	var green = CardClass.new()
+	green.card_name = "Green"
+	green.card_type = CardClass.CardType.COLOR
+	green.energy_cost = 1
+	green.effect_value = 3
+	green.card_description = "Heal 3 HP."
+	deck.append(green)
+	var purple = CardClass.new()
+	purple.card_name = "Purple"
+	purple.card_type = CardClass.CardType.COLOR
+	purple.energy_cost = 1
+	purple.effect_value = 6
+	purple.card_description = "Gain 6 Block."
+	deck.append(purple)
+	print("Deck built: Turtle starter (12 cards — Defense/Block/Sustain)")
 
 
 func _build_dog_deck():
-	for i in 10:
-		var strike = CardClass.new()
-		strike.card_name = "Strike"
-		strike.card_type = CardClass.CardType.ATTACK
-		strike.energy_cost = 1
-		strike.effect_value = 6
-		strike.card_description = "Deal 6 damage."
-		deck.append(strike)
-	for i in 4:
-		var defend = CardClass.new()
-		defend.card_name = "Defend"
-		defend.card_type = CardClass.CardType.SKILL
-		defend.energy_cost = 1
-		defend.effect_value = 5
-		defend.card_description = "Gain 5 Block."
-		deck.append(defend)
 	for i in 3:
-		var dog = CardClass.new()
-		dog.card_name = "Dog"
-		dog.card_type = CardClass.CardType.ANIMAL
-		dog.energy_cost = 0
-		dog.animal_hp = 10
-		dog.animal_atk = 8
-		dog.animal_defense = 1
-		dog.card_description = "ATK: 8 | HP: 10"
-		deck.append(dog)
-	print("Deck built: Dog starter")
+		var card = CardClass.new()
+		card.card_name = "Dog"
+		card.card_type = CardClass.CardType.ANIMAL
+		card.energy_cost = 0
+		card.animal_hp = 10
+		card.animal_atk = 8
+		card.animal_defense = 1
+		card.card_description = "ATK: 8 | HP: 10"
+		deck.append(card)
+	for i in 3:
+		var card = CardClass.new()
+		card.card_name = "Strike"
+		card.card_type = CardClass.CardType.ATTACK
+		card.energy_cost = 1
+		card.effect_value = 6
+		card.card_description = "Deal 6 damage."
+		deck.append(card)
+	for i in 2:
+		var card = CardClass.new()
+		card.card_name = "Defend"
+		card.card_type = CardClass.CardType.SKILL
+		card.energy_cost = 1
+		card.effect_value = 5
+		card.card_description = "Gain 5 Block."
+		deck.append(card)
+	for i in 2:
+		var card = CardClass.new()
+		card.card_name = "Pounce"
+		card.card_type = CardClass.CardType.ATTACK
+		card.energy_cost = 1
+		card.effect_value = 8
+		card.card_description = "Deal 8 damage."
+		deck.append(card)
+	var bite = CardClass.new()
+	bite.card_name = "Bite"
+	bite.card_type = CardClass.CardType.ATTACK
+	bite.energy_cost = 1
+	bite.effect_value = 8
+	bite.card_description = "Deal 8 damage."
+	deck.append(bite)
+	var red = CardClass.new()
+	red.card_name = "Red"
+	red.card_type = CardClass.CardType.COLOR
+	red.energy_cost = 1
+	red.effect_value = 2
+	red.card_description = "Buff field animals +2 ATK"
+	deck.append(red)
+	print("Deck built: Dog starter (12 cards — Power/Damage/Finisher)")
 # SECTION 12 — TURN FLOW
 # =====================================================================
 
@@ -349,6 +415,11 @@ func start_turn():
 	if current_turn == 1 and GameState.relics.has("Bandage Roll"):
 		player_defense += 5
 		print("Bandage Roll: started combat with 5 Block")
+		update_hud()
+
+	if current_turn == 1 and GameState.relics.has("Iron Shield"):
+		player_defense += 3
+		print("Iron Shield: started combat with 3 Block")
 		update_hud()
 
 	update_hud()
@@ -634,6 +705,27 @@ func play_color_or_word_card(card, card_visual):
 	elif card.card_name == "MAGIC":
 		player_defense += 8
 		print("Gained 8 Block")
+		update_hud()
+	elif card.card_name == "Red":
+		for animal in get_field_animals():
+			animal.animal_atk += card.effect_value
+		print("Red: field animals gained +", card.effect_value, " ATK")
+		spawn_field_visuals()
+		update_hud()
+	elif card.card_name == "Yellow":
+		current_energy += card.effect_value
+		print("Yellow: gained ", card.effect_value, " energy this turn. Energy: ", current_energy)
+		update_hud()
+	elif card.card_name == "Purple":
+		player_defense += card.effect_value
+		print("Purple: gained ", card.effect_value, " Block")
+		update_hud()
+	elif card.card_name == "White":
+		for animal in get_field_animals():
+			animal.animal_atk += 2
+			animal.animal_hp += 4
+		print("White: field animals gained +2 ATK and +4 HP")
+		spawn_field_visuals()
 		update_hud()
 	else:
 		for animal in get_field_animals():

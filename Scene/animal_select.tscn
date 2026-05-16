@@ -13,19 +13,19 @@ offset_bottom = 648.0
 color = Color(0.1, 0.15, 0.1, 1)
 
 [node name="TitleLabel" type="Label" parent="CanvasLayer" unique_id=1157340883]
-offset_left = 290.0
-offset_top = 31.0
-offset_right = 890.0
-offset_bottom = 101.0
+offset_left = 288.0
+offset_top = 21.0
+offset_right = 888.0
+offset_bottom = 91.0
 theme_override_font_sizes/font_size = 36
 text = "Choose Your Starter"
 horizontal_alignment = 1
 
 [node name="BunnyPanel" type="Panel" parent="CanvasLayer" unique_id=594510999]
-offset_left = 86.0
-offset_top = 130.0
-offset_right = 386.0
-offset_bottom = 450.0
+offset_left = 82.0
+offset_top = 101.0
+offset_right = 382.0
+offset_bottom = 421.0
 
 [node name="BunnyNameLabel" type="Label" parent="CanvasLayer/BunnyPanel" unique_id=919623758]
 layout_mode = 0
@@ -70,10 +70,10 @@ theme_override_font_sizes/font_size = 20
 text = "Choose"
 
 [node name="TurtlePanel" type="Panel" parent="CanvasLayer" unique_id=1125772384]
-offset_left = 436.0
-offset_top = 130.0
-offset_right = 736.0
-offset_bottom = 450.0
+offset_left = 446.0
+offset_top = 101.0
+offset_right = 746.0
+offset_bottom = 421.0
 
 [node name="TurtleNameLabel" type="Label" parent="CanvasLayer/TurtlePanel" unique_id=1773249153]
 layout_mode = 0
@@ -118,10 +118,10 @@ theme_override_font_sizes/font_size = 20
 text = "Choose"
 
 [node name="DogPanel" type="Panel" parent="CanvasLayer" unique_id=435932093]
-offset_left = 786.0
-offset_top = 130.0
-offset_right = 1086.0
-offset_bottom = 450.0
+offset_left = 796.0
+offset_top = 101.0
+offset_right = 1096.0
+offset_bottom = 421.0
 
 [node name="DogNameLabel" type="Label" parent="CanvasLayer/DogPanel" unique_id=2017282237]
 layout_mode = 0
@@ -170,9 +170,9 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 218.0
-offset_top = -158.0
-offset_right = -212.0
+offset_left = 92.0
+offset_top = -200.0
+offset_right = -66.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -306,6 +306,62 @@ theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "MAGIC"
 
+[node name="ColorRow" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=1800000001]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RowLabel" type="Label" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow" unique_id=1800000002]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Colors:"
+
+[node name="ColorsButtons" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow" unique_id=1800000003]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnBlue" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons" unique_id=1800000004]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Blue"
+
+[node name="BtnRed" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons" unique_id=1800000005]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Red"
+
+[node name="BtnGreen" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons" unique_id=1800000006]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Green"
+
+[node name="BtnYellow" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons" unique_id=1800000007]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Yellow"
+
+[node name="BtnPurple" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons" unique_id=1800000008]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Purple"
+
+[node name="BtnWhite" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/ColorRow/ColorsButtons" unique_id=1800000009]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "White"
+
 [node name="VerbRow" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=1709034683]
 layout_mode = 2
 theme_override_constants/separation = 4
@@ -368,3 +424,41 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "Sneak"
+
+[node name="RelicsRow" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox" unique_id=1900000001]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RowLabel" type="Label" parent="CanvasLayer/DevDock/Margin/VBox/RelicsRow" unique_id=1900000002]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Relics:"
+
+[node name="RelicsButtons" type="HBoxContainer" parent="CanvasLayer/DevDock/Margin/VBox/RelicsRow" unique_id=1900000003]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BtnBandageRoll" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/RelicsRow/RelicsButtons" unique_id=1900000004]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+tooltip_text = "Start each combat with 5 Block."
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Bandage Roll"
+
+[node name="BtnIronShield" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/RelicsRow/RelicsButtons" unique_id=1900000005]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+tooltip_text = "Start each combat with 3 Block."
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Iron Shield"
+
+[node name="BtnLuckyCoin" type="Button" parent="CanvasLayer/DevDock/Margin/VBox/RelicsRow/RelicsButtons" unique_id=1900000006]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+tooltip_text = "Gain +5 extra gold after normal combat."
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+text = "Lucky Coin"

@@ -108,6 +108,30 @@ static func get_colors() -> Array:
 	green.card_description = "Heal 3 HP."
 	pool.append(green)
 
+	var yellow = CardClass.new()
+	yellow.card_name = "Yellow"
+	yellow.card_type = CardClass.CardType.COLOR
+	yellow.energy_cost = 1
+	yellow.effect_value = 1
+	yellow.card_description = "Gain 1 energy this turn."
+	pool.append(yellow)
+
+	var purple = CardClass.new()
+	purple.card_name = "Purple"
+	purple.card_type = CardClass.CardType.COLOR
+	purple.energy_cost = 1
+	purple.effect_value = 6
+	purple.card_description = "Gain 6 Block."
+	pool.append(purple)
+
+	var white = CardClass.new()
+	white.card_name = "White"
+	white.card_type = CardClass.CardType.COLOR
+	white.energy_cost = 1
+	white.effect_value = 2
+	white.card_description = "All field animals gain +2 ATK and +4 HP."
+	pool.append(white)
+
 	return pool
 
 static func get_adjectives() -> Array:

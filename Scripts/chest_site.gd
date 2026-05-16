@@ -1,11 +1,24 @@
 # chest_site.gd
 # ------------------------------------------------------------------
-# Chest site screen. Player can take the Bandage Roll relic once,
-# then leave. Marks the originating roadmap node complete on exit.
+# Chest site screen. Randomly offers one relic the player doesn't own.
+# Marks the originating roadmap node complete on exit.
 # ------------------------------------------------------------------
 extends Control
 
+const RELIC_POOL = {
+	"Bandage Roll": {
+		"description": "Start each combat with 5 Block.",
+	},
+	"Iron Shield": {
+		"description": "Start each combat with 3 Block.",
+	},
+	"Lucky Coin": {
+		"description": "Gain +5 extra gold after normal combat.",
+	},
+}
+
 var _take_btn: Button
+var _chosen_relic: String = ""
 
 
 func _ready():
@@ -30,28 +43,31 @@ func _build_ui():
 	add_child(title)
 
 	var subtitle = Label.new()
-	subtitle.text = "You found a relic"
 	subtitle.add_theme_font_size_override("font_size", 18)
 	subtitle.size = Vector2(300, 30)
 	subtitle.position = Vector2(426, 220)
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(subtitle)
 
-	var relic_name = Label.new()
-	relic_name.text = "Bandage Roll"
-	relic_name.add_theme_font_size_override("font_size", 24)
-	relic_name.size = Vector2(300, 40)
-	relic_name.position = Vector2(426, 270)
-	relic_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	add_child(relic_name)
+	var relic_name_label = Label.new()
+	relic_name_label.add_theme_font_size_override("font_size", 24)
+	relic_name_label.size = Vector2(300, 40)
+	relic_name_label.position = Vector2(426, 270)
+	relic_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	add_child(relic_name_label)
 
-	var relic_desc = Label.new()
-	relic_desc.text = "Start each combat with 5 Block."
-	relic_desc.add_theme_font_size_override("font_size", 16)
-	relic_desc.size = Vector2(400, 30)
-	relic_desc.position = Vector2(376, 320)
-	relic_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	add_child(relic_desc)
+	var relic_desc_label = Label.new()
+	relic_desc_label.add_theme_font_size_override("font_size", 16)
+	relic_desc_label.size = Vector2(400, 30)
+	relic_desc_label.position = Vector2(376, 320)
+	relic_desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	add_child(relic_desc_label)
+
+	# Pick a relic the player doesn't already own
+	var available: Array = []
+	for relic_name in RELIC_POOL.keys():
+		if not GameState.relics.has(relic_name):
+			available.append(relic_name)
 
 	_take_btn = Button.new()
 	_take_btn.name = "TakeButton"
@@ -61,10 +77,18 @@ func _build_ui():
 	_take_btn.pressed.connect(_on_take_pressed)
 	add_child(_take_btn)
 
-	if GameState.relics.has("Bandage Roll"):
+	if available.is_empty():
+		subtitle.text = "The chest is empty."
+		relic_name_label.text = "No new relics"
+		relic_desc_label.text = "You already own everything."
+		_take_btn.text = "Nothing to Take"
 		_take_btn.disabled = true
-		_take_btn.text = "Already Taken"
+		_chosen_relic = ""
 	else:
+		_chosen_relic = available[randi() % available.size()]
+		subtitle.text = "You found a relic"
+		relic_name_label.text = _chosen_relic
+		relic_desc_label.text = RELIC_POOL[_chosen_relic]["description"]
 		_take_btn.text = "Take Relic"
 
 	var leave_btn = Button.new()
@@ -78,10 +102,12 @@ func _build_ui():
 
 
 func _on_take_pressed():
-	GameState.relics.append("Bandage Roll")
+	if _chosen_relic == "":
+		return
+	GameState.relics.append(_chosen_relic)
 	_take_btn.disabled = true
 	_take_btn.text = "Taken"
-	print("Relic acquired: Bandage Roll")
+	print("Relic acquired: ", _chosen_relic)
 
 
 func _on_leave_pressed():

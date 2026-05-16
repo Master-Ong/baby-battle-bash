@@ -1,50 +1,189 @@
-In Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
+PATCH: Relic Pool Expansion (Iron Shield + Lucky Coin)
+======================================================
 
-Read this file before making any changes:
-1. CLAUDE.md
-2. res://Scripts/animal_select.gd — read the full file
+CONTEXT:
+Baby Battle Bash at C:\Users\Nicky\Documents\baby-battle-bash
+Godot 4.6.2, GDScript only.
 
----
+BEFORE YOU CHANGE ANYTHING:
+Read these files first:
+- res://CLAUDE.md
+- res://Scripts/GameState.gd
+- res://Scripts/chest_site.gd
+- res://Scripts/gamer_manager_node.gd (lines 335-355, the start_turn function)
+- res://Scripts/reward_screen.gd (lines 95-115, the _on_card_chosen function)
 
 GOAL:
-Add hover tooltips to all DevDock test card buttons using Godot's
-built-in tooltip_text property. Use the existing TEST_CARD_DATA "desc"
-field as the tooltip text. Smallest safe patch only.
+Expand the chest from always giving "Bandage Roll" to randomly giving one relic from a small pool. Add two new relics: Iron Shield and Lucky Coin.
 
-CHANGES — one file only: res://Scripts/animal_select.gd
+DO NOT TOUCH:
+- roadmap.gd
+- shop.gd
+- card_display.gd
+- Card.gd
+- CardDatabase.gd
+- animal_select.gd
+- combat logic (except the specific relic hook spots noted below)
+- Any UI polish or sprite work
 
-In _ready(), after the starter button connections, add a loop that
-sets tooltip_text on every DevDock button:
+======================================================
+STEP 1 — Add relic pool data
+======================================================
 
-    # Set tooltips on dev card buttons
-    for container in _button_containers:
-        for child in container.get_children():
-            if child is Button and TEST_CARD_DATA.has(child.text):
-                child.tooltip_text = TEST_CARD_DATA[child.text]["desc"]
+Where: res://Scripts/chest_site.gd (top of file)
 
-This automatically gives every button a tooltip matching its card
-description. No separate tooltip dictionary needed — TEST_CARD_DATA
-already has the data.
+Add a constant dictionary for the relic pool:
 
-Examples of what players will see on hover:
-- Pounce: "Deal 8 damage."
-- Dash: "Deal 4 damage. Draw 1 card."
-- Bunny: "ATK: 4 | HP: 12"
-- BIG: "All field animals gain +5 ATK and +5 HP."
+const RELIC_POOL = {
+    "Bandage Roll": {
+        "description": "Start each combat with 5 Block.",
+    },
+    "Iron Shield": {
+        "description": "Start each combat with 3 Block.",
+    },
+    "Lucky Coin": {
+        "description": "Gain +5 extra gold after normal combat.",
+    },
+}
 
-RULES:
-- Only edit animal_select.gd
-- Only add the tooltip loop in _ready()
-- Do not touch any other file
-- Do not change button text, toggle_mode, or layout
-- Do not change TEST_CARD_DATA
-- Do not change _add_test_cards()
-- Do not change starter selection
-- Do not change scene file
-- Smallest safe patch only
+This keeps it simple and in one place. No new file needed yet.
 
-AFTER THE FIX, REPORT:
-1. Show the updated _ready() function
-2. Confirm tooltips use TEST_CARD_DATA["desc"]
-3. Confirm no other files were touched
-4. Confirm toggle behavior is unchanged
+======================================================
+STEP 2 — Refactor chest_site.gd to use the relic pool
+======================================================
+
+Replace the current hardcoded Bandage Roll UI logic in _build_ui() so that:
+
+1. On _ready or _build_ui, determine which relics the player does NOT already own:
+   var available = []
+   for relic_name in RELIC_POOL.keys():
+       if not GameState.relics.has(relic_name):
+           available.append(relic_name)
+
+2. If available is empty (player owns all relics):
+   - Show "Chest Empty" or "No new relics"
+   - Disable the Take button
+   - Set a var like _chosen_relic = "" so _on_take_pressed does nothing
+
+3. If available is NOT empty:
+   - Pick one at random: var _chosen_relic = available[randi() % available.size()]
+   - Display that relic's name and description from RELIC_POOL[_chosen_relic]
+   - Enable the Take button
+
+4. In _on_take_pressed():
+   - Instead of hardcoding "Bandage Roll", use _chosen_relic:
+     GameState.relics.append(_chosen_relic)
+     print("Relic acquired: ", _chosen_relic)
+   - Disable the button after taking
+
+Keep the Leave button exactly as it is now.
+
+Store _chosen_relic as a script-level var (like the existing _take_btn var).
+
+======================================================
+STEP 3 — Add Iron Shield effect in combat
+======================================================
+
+Where: res://Scripts/gamer_manager_node.gd, in the start_turn() function
+
+Currently there is this block (around line 349):
+    if current_turn == 1 and GameState.relics.has("Bandage Roll"):
+        player_defense += 5
+        print("Bandage Roll: started combat with 5 Block")
+        update_hud()
+
+Add Iron Shield right after that block, same pattern:
+    if current_turn == 1 and GameState.relics.has("Iron Shield"):
+        player_defense += 3
+        print("Iron Shield: started combat with 3 Block")
+        update_hud()
+
+NOTE: If the player has BOTH Bandage Roll and Iron Shield, both should apply. The player gets 5 + 3 = 8 Block. This is intentional and correct. The update_hud() at the end of start_turn() already exists, so the double update_hud() inside the relic checks is fine (it just refreshes the display).
+
+======================================================
+STEP 4 — Add Lucky Coin effect in reward screen
+======================================================
+
+Where: res://Scripts/reward_screen.gd, in the _on_card_chosen() function
+
+Currently (around line 103):
+    GameState.gold += gold_earned
+    print("Gold earned: ", gold_earned, " | Total gold: ", GameState.gold)
+
+Change to:
+    var bonus_gold = 0
+    if GameState.relics.has("Lucky Coin"):
+        bonus_gold = 5
+    GameState.gold += gold_earned + bonus_gold
+    if bonus_gold > 0:
+        print("Lucky Coin: +", bonus_gold, " bonus gold!")
+    print("Gold earned: ", gold_earned + bonus_gold, " | Total gold: ", GameState.gold)
+
+Also update the gold_label in _ready() to show the bonus if applicable:
+    var preview_bonus = 0
+    if GameState.relics.has("Lucky Coin"):
+        preview_bonus = 5
+    gold_label.text = "Gold: " + str(GameState.gold) + "  (+" + str(gold_earned + preview_bonus) + ")"
+
+IMPORTANT: Lucky Coin should NOT apply after boss fights. The reward screen currently only shows after normal combat (boss victory goes to win_screen.gd), so this is already handled — no extra guard needed. But verify by checking that win_screen.gd does NOT use gold_earned or award gold. If it does, add a guard: if not GameState.is_boss_fight.
+
+======================================================
+STEP 5 — Verify win_screen does NOT award gold
+======================================================
+
+Read res://Scripts/win_screen.gd and confirm it does not add gold. If it does, make sure Lucky Coin does NOT apply there. The boss victory should not give bonus gold.
+
+======================================================
+SUCCESS CRITERIA
+======================================================
+
+After this patch:
+1. Chest node randomly offers one relic the player doesn't own
+2. If player owns all 3 relics, chest says "No new relics" or similar
+3. Bandage Roll still gives 5 Block on turn 1 (unchanged)
+4. Iron Shield gives 3 Block on turn 1 (same pattern)
+5. Having both gives 8 Block total on turn 1
+6. Lucky Coin gives +5 gold on the reward screen after normal combat
+7. Lucky Coin does NOT give bonus gold after boss
+8. All existing systems still work (combat, shop, fusion, roadmap)
+
+======================================================
+TEST PLAN
+======================================================
+
+Test 1 — Chest gives random relic:
+- Start new run, play to Chest node
+- Open chest, verify it shows one of the 3 relics (not always Bandage Roll)
+- Take it, verify console prints "Relic acquired: [name]"
+- If you want to test randomness, do multiple runs
+
+Test 2 — Iron Shield works:
+- Get Iron Shield from chest (may need multiple runs or temporarily hardcode it)
+- Enter combat
+- On turn 1, check console for "Iron Shield: started combat with 3 Block"
+- Verify Block shows as 3 in HUD
+
+Test 3 — Lucky Coin works:
+- Get Lucky Coin from chest
+- Win a normal combat
+- On reward screen, verify gold shows +15 instead of +10
+- Check console for "Lucky Coin: +5 bonus gold!"
+
+Test 4 — Stacking relics:
+- Use DevDock or multiple chests to get both Bandage Roll and Iron Shield
+- Enter combat, verify turn 1 shows 8 Block total
+
+Test 5 — No duplicates:
+- Get a relic, go to another chest (if roadmap has multiple — it currently has 1)
+- Verify the chest does not offer the same relic again
+
+Test 6 — All relics owned:
+- (Hard to test with 1 chest node, but code should handle it)
+- If all 3 are owned, chest should show empty/no new relics
+
+Test 7 — Existing systems:
+- Verify combat still works normally
+- Verify shop still works
+- Verify fusion still works
+- Verify boss fight still works
+- Verify run complete still returns to main menu cleanly

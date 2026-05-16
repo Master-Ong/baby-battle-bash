@@ -30,7 +30,10 @@ func _ready():
 	# Run even while the tree is paused so buttons stay responsive.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	gold_label.text = "Gold: " + str(GameState.gold) + "  (+" + str(gold_earned) + ")"
+	var preview_bonus = 0
+	if GameState.relics.has("Lucky Coin"):
+		preview_bonus = 5
+	gold_label.text = "Gold: " + str(GameState.gold) + "  (+" + str(gold_earned + preview_bonus) + ")"
 
 	card_option_0.pressed.connect(_on_card_chosen.bind(0))
 	card_option_1.pressed.connect(_on_card_chosen.bind(1))
@@ -100,8 +103,13 @@ func pick_rewards() -> void:
 func _on_card_chosen(index: int) -> void:
 	var chosen_card = _card_options[index]
 
-	GameState.gold += gold_earned
-	print("Gold earned: ", gold_earned, " | Total gold: ", GameState.gold)
+	var bonus_gold = 0
+	if GameState.relics.has("Lucky Coin"):
+		bonus_gold = 5
+	GameState.gold += gold_earned + bonus_gold
+	if bonus_gold > 0:
+		print("Lucky Coin: +", bonus_gold, " bonus gold!")
+	print("Gold earned: ", gold_earned + bonus_gold, " | Total gold: ", GameState.gold)
 
 	GameState.reward_cards.append(chosen_card)
 	print("Reward: stored '", chosen_card.card_name, "' in GameState. Total reward cards: ", GameState.reward_cards.size())
